@@ -7,12 +7,12 @@ interface CommentItemProps {
 
 export function CommentItem({ comment }: CommentItemProps) {
   return (
-    <div className="py-3 border-b border-bulong-700/50 last:border-0 animate-fade-in">
+    <div className="py-3 border-b border-selah-700/50 last:border-0 animate-fade-in">
       <div className="flex items-baseline justify-between gap-2 mb-1">
-        <span className="text-xs font-medium text-bulong-300">
+        <span className="text-xs font-medium text-selah-300">
           {comment.anonymous_name}
         </span>
-        <span className="text-xs text-bulong-500 flex-shrink-0">
+        <span className="text-xs text-selah-500 flex-shrink-0">
           {relativeTime(comment.created_at)}
         </span>
       </div>

@@ -1,7 +1,7 @@
 export function Spinner({ size = 24 }: { size?: number }) {
   return (
     <svg
-      className="animate-spin text-bulong-400"
+      className="animate-spin text-selah-400"
       width={size}
       height={size}
       viewBox="0 0 24 24"

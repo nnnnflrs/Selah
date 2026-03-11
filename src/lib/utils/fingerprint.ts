@@ -1,4 +1,4 @@
-const DEVICE_ID_KEY = "bulong_device_id";
+const DEVICE_ID_KEY = "selah_device_id";
 
 /**
  * Returns a persistent device ID (UUID v4) stored in localStorage.

@@ -1,4 +1,4 @@
--- Bulong Database Schema
+-- Selah Database Schema
 
 -- Emotion enum
 CREATE TYPE public.emotion AS ENUM (

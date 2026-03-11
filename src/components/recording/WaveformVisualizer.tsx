@@ -18,7 +18,7 @@ export function WaveformVisualizer({
   const canvasRef = useWaveform({ analyserNode, isActive, color });
 
   return (
-    <div className="w-full rounded-lg bg-bulong-900/50 overflow-hidden">
+    <div className="w-full rounded-lg bg-selah-900/50 overflow-hidden">
       <canvas
         ref={canvasRef}
         width={400}

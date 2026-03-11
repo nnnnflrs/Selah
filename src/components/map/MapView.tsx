@@ -155,7 +155,7 @@ export default function MapView() {
     <div className="h-full w-full relative">
       <Map
         ref={mapRef}
-        id="bulong-map"
+        id="selah-map"
         mapboxAccessToken={MAPBOX_TOKEN}
         mapStyle={MAPBOX_STYLE}
         projection={{ name: "globe" }}

@@ -1,4 +1,4 @@
-# Bulong
+# Selah
 
 A global anonymous audio-sharing platform. Record your feelings, pin them to the map, and listen to the world.
 
@@ -39,8 +39,8 @@ Built with Next.js 14, Supabase, Mapbox GL JS, Zustand, and TailwindCSS.
 ### 1. Clone the repo
 
 ```bash
-git clone https://github.com/nnnnflrs/Bulong.git
-cd Bulong
+git clone https://github.com/nnnnflrs/Selah.git
+cd Selah
 ```
 
 ### 2. Install dependencies

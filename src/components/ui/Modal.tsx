@@ -47,7 +47,7 @@ export function Modal({ isOpen, onClose, children, className = "" }: ModalProps)
         aria-modal="true"
         className={`
           relative z-10 w-full max-w-lg max-h-[90vh] overflow-y-auto
-          bg-bulong-900 border border-bulong-600 rounded-2xl
+          bg-selah-900 border border-selah-600 rounded-2xl
           shadow-2xl animate-fade-in
           ${className}
         `}

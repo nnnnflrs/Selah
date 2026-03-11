@@ -38,9 +38,9 @@ export function RandomListenButton({ mapRef }: RandomListenButtonProps) {
         absolute bottom-8 left-8 z-[1000]
         flex items-center gap-2
         px-4 py-2.5 rounded-full
-        bg-bulong-800/80 border border-bulong-600
-        text-bulong-300 hover:text-white
-        hover:bg-bulong-700/80 hover:border-bulong-500
+        bg-selah-800/80 border border-selah-600
+        text-selah-300 hover:text-white
+        hover:bg-selah-700/80 hover:border-selah-500
         shadow-lg shadow-black/20
         transition-all duration-200
         hover:scale-105 active:scale-95

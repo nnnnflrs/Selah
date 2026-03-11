@@ -26,7 +26,7 @@ export function ConfirmDialog({
     <Modal isOpen={isOpen} onClose={onClose} className="max-w-sm">
       <div className="p-6 space-y-4">
         <h3 className="text-lg font-medium text-white">{title}</h3>
-        <p className="text-sm text-bulong-300">{message}</p>
+        <p className="text-sm text-selah-300">{message}</p>
         <div className="flex justify-end gap-3">
           <Button variant="ghost" onClick={onClose}>
             Cancel

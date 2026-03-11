@@ -6,13 +6,13 @@ type Variant = "primary" | "secondary" | "danger" | "ghost";
 
 const VARIANTS: Record<Variant, string> = {
   primary:
-    "bg-bulong-700 hover:bg-bulong-600 text-white border border-bulong-600",
+    "bg-selah-700 hover:bg-selah-600 text-white border border-selah-600",
   secondary:
-    "bg-transparent hover:bg-bulong-800 text-bulong-300 border border-bulong-600",
+    "bg-transparent hover:bg-selah-800 text-selah-300 border border-selah-600",
   danger:
     "bg-red-900/30 hover:bg-red-900/50 text-red-300 border border-red-800/50",
   ghost:
-    "bg-transparent hover:bg-bulong-800 text-bulong-300 border border-transparent",
+    "bg-transparent hover:bg-selah-800 text-selah-300 border border-transparent",
 };
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {

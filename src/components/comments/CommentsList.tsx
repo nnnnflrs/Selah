@@ -24,7 +24,7 @@ export function CommentsList({ recordingId }: CommentsListProps) {
             <Spinner size={20} />
           </div>
         ) : comments.length === 0 ? (
-          <p className="text-sm text-bulong-500 text-center py-6">
+          <p className="text-sm text-selah-500 text-center py-6">
             No comments yet. Be the first to share a thought.
           </p>
         ) : (

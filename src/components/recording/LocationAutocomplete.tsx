@@ -117,21 +117,21 @@ export function LocationAutocomplete({
         maxLength={100}
         className="
           w-full px-3 py-2 rounded-lg text-sm
-          bg-bulong-800 border border-bulong-600
-          text-white placeholder-bulong-500
-          focus:outline-none focus:border-bulong-400 focus:ring-1 focus:ring-bulong-400
+          bg-selah-800 border border-selah-600
+          text-white placeholder-selah-500
+          focus:outline-none focus:border-selah-400 focus:ring-1 focus:ring-selah-400
           transition-colors duration-150
         "
       />
 
       {isOpen && suggestions.length > 0 && (
-        <ul className="absolute z-50 mt-1 w-full rounded-lg border border-bulong-600 bg-bulong-800/95 backdrop-blur-sm shadow-lg overflow-hidden">
+        <ul className="absolute z-50 mt-1 w-full rounded-lg border border-selah-600 bg-selah-800/95 backdrop-blur-sm shadow-lg overflow-hidden">
           {suggestions.map((s, i) => (
             <li
               key={s.id}
               className={`
                 px-3 py-2 text-sm cursor-pointer transition-colors
-                ${i === activeIndex ? "bg-bulong-600 text-white" : "text-bulong-300 hover:bg-bulong-700 hover:text-white"}
+                ${i === activeIndex ? "bg-selah-600 text-white" : "text-selah-300 hover:bg-selah-700 hover:text-white"}
               `}
               onMouseEnter={() => setActiveIndex(i)}
               onClick={() => handleSelect(s)}

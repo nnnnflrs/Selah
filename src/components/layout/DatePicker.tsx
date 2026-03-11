@@ -115,8 +115,8 @@ export function DatePicker() {
           border transition-all duration-200
           ${
             selectedDate
-              ? "bg-bulong-700/80 border-cyan-500/40 text-cyan-300"
-              : "bg-bulong-800/60 border-bulong-600 text-bulong-300 hover:text-white hover:border-bulong-500"
+              ? "bg-selah-700/80 border-cyan-500/40 text-cyan-300"
+              : "bg-selah-800/60 border-selah-600 text-selah-300 hover:text-white hover:border-selah-500"
           }
         `}
         aria-label="Filter by date"
@@ -142,12 +142,12 @@ export function DatePicker() {
       </button>
 
       {isOpen && (
-        <div className="absolute top-full right-0 mt-2 w-72 rounded-xl bg-bulong-900/95 border border-bulong-600 shadow-2xl shadow-black/40 backdrop-blur-md p-3 z-50">
+        <div className="absolute top-full right-0 mt-2 w-72 rounded-xl bg-selah-900/95 border border-selah-600 shadow-2xl shadow-black/40 backdrop-blur-md p-3 z-50">
           {/* Month navigation */}
           <div className="flex items-center justify-between mb-3">
             <button
               onClick={handlePrevMonth}
-              className="p-1 rounded hover:bg-bulong-700 text-bulong-300 hover:text-white transition-colors"
+              className="p-1 rounded hover:bg-selah-700 text-selah-300 hover:text-white transition-colors"
               aria-label="Previous month"
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -159,7 +159,7 @@ export function DatePicker() {
             </span>
             <button
               onClick={handleNextMonth}
-              className="p-1 rounded hover:bg-bulong-700 text-bulong-300 hover:text-white transition-colors"
+              className="p-1 rounded hover:bg-selah-700 text-selah-300 hover:text-white transition-colors"
               aria-label="Next month"
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -171,7 +171,7 @@ export function DatePicker() {
           {/* Day headers */}
           <div className="grid grid-cols-7 gap-1 mb-1">
             {DAYS.map((d) => (
-              <div key={d} className="text-center text-xs text-bulong-400 font-medium py-1">
+              <div key={d} className="text-center text-xs text-selah-400 font-medium py-1">
                 {d}
               </div>
             ))}
@@ -196,15 +196,15 @@ export function DatePicker() {
                   className={`
                     w-full aspect-square rounded-lg text-sm font-medium
                     flex items-center justify-center transition-all duration-150
-                    ${isFuture ? "text-bulong-600 cursor-not-allowed" : "cursor-pointer"}
+                    ${isFuture ? "text-selah-600 cursor-not-allowed" : "cursor-pointer"}
                     ${
                       isSelected
                         ? "bg-cyan-500/30 text-cyan-200 shadow-[0_0_8px_2px_rgba(0,240,255,0.2)]"
                         : isToday
-                        ? "bg-bulong-700 text-white ring-1 ring-cyan-500/30"
+                        ? "bg-selah-700 text-white ring-1 ring-cyan-500/30"
                         : isFuture
                         ? ""
-                        : "text-bulong-200 hover:bg-bulong-700 hover:text-white"
+                        : "text-selah-200 hover:bg-selah-700 hover:text-white"
                     }
                   `}
                 >
@@ -218,7 +218,7 @@ export function DatePicker() {
           {selectedDate && (
             <button
               onClick={handleClear}
-              className="mt-3 w-full py-1.5 text-sm text-bulong-300 hover:text-white bg-bulong-800 hover:bg-bulong-700 rounded-lg transition-colors"
+              className="mt-3 w-full py-1.5 text-sm text-selah-300 hover:text-white bg-selah-800 hover:bg-selah-700 rounded-lg transition-colors"
             >
               Clear filter
             </button>

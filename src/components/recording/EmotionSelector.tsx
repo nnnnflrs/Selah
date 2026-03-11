@@ -11,7 +11,7 @@ interface EmotionSelectorProps {
 export function EmotionSelector({ value, onChange }: EmotionSelectorProps) {
   return (
     <div className="space-y-2">
-      <label className="block text-sm text-bulong-300">
+      <label className="block text-sm text-selah-300">
         How are you feeling?
       </label>
       <div className="grid grid-cols-4 gap-2">
@@ -30,7 +30,7 @@ export function EmotionSelector({ value, onChange }: EmotionSelectorProps) {
                 ${
                   isSelected
                     ? "border-opacity-60 scale-105"
-                    : "border-bulong-600 hover:border-bulong-500 bg-bulong-800/50"
+                    : "border-selah-600 hover:border-selah-500 bg-selah-800/50"
                 }
               `}
               style={
@@ -48,7 +48,7 @@ export function EmotionSelector({ value, onChange }: EmotionSelectorProps) {
                 style={{ backgroundColor: config.color }}
               />
               <span
-                className={isSelected ? "text-white" : "text-bulong-400"}
+                className={isSelected ? "text-white" : "text-selah-400"}
               >
                 {config.label}
               </span>

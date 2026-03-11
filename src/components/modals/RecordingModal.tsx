@@ -128,7 +128,7 @@ export function RecordingModal() {
                   <div className="space-y-2">
                     <div className="flex items-center gap-2 flex-wrap">
                       <Badge emotion={recording.emotion} />
-                      <span className="text-xs text-bulong-400">
+                      <span className="text-xs text-selah-400">
                         {relativeTime(recording.created_at)}
                       </span>
                     </div>
@@ -136,7 +136,7 @@ export function RecordingModal() {
                       {recording.anonymous_name}
                     </h3>
                     {recording.location_text && (
-                      <p className="text-xs text-bulong-400">
+                      <p className="text-xs text-selah-400">
                         {recording.location_text}
                       </p>
                     )}
@@ -150,7 +150,7 @@ export function RecordingModal() {
                     {isOwner ? (
                       <button
                         onClick={() => setShowDelete(true)}
-                        className="text-xs text-bulong-500 hover:text-red-400 transition-colors"
+                        className="text-xs text-selah-500 hover:text-red-400 transition-colors"
                       >
                         Delete
                       </button>
@@ -162,8 +162,8 @@ export function RecordingModal() {
                       disabled={hasReported}
                       className={`text-xs transition-colors ${
                         hasReported
-                          ? "text-bulong-600 cursor-not-allowed"
-                          : "text-bulong-500 hover:text-red-400"
+                          ? "text-selah-600 cursor-not-allowed"
+                          : "text-selah-500 hover:text-red-400"
                       }`}
                     >
                       {hasReported ? "Reported" : "Report"}
@@ -171,13 +171,13 @@ export function RecordingModal() {
                   </div>
 
                   {/* Divider */}
-                  <div className="border-t border-bulong-700" />
+                  <div className="border-t border-selah-700" />
 
                   {/* Comments */}
                   <CommentsList recordingId={recording.id} />
                 </div>
               ) : (
-                <p className="text-bulong-400 text-center py-12">
+                <p className="text-selah-400 text-center py-12">
                   Recording not found
                 </p>
               )}
@@ -185,7 +185,7 @@ export function RecordingModal() {
 
             <button
               onClick={clearSelection}
-              className="text-bulong-400 hover:text-white transition-colors ml-4 flex-shrink-0"
+              className="text-selah-400 hover:text-white transition-colors ml-4 flex-shrink-0"
             >
               <svg
                 width="20"

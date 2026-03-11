@@ -75,7 +75,7 @@ export function AudioPlayer({ src, fallbackDuration }: AudioPlayerProps) {
 
       <button
         onClick={togglePlay}
-        className="w-10 h-10 flex-shrink-0 flex items-center justify-center rounded-full bg-bulong-700 hover:bg-bulong-600 border border-bulong-500 transition-colors"
+        className="w-10 h-10 flex-shrink-0 flex items-center justify-center rounded-full bg-selah-700 hover:bg-selah-600 border border-selah-500 transition-colors"
       >
         {isPlaying ? (
           <svg
@@ -103,7 +103,7 @@ export function AudioPlayer({ src, fallbackDuration }: AudioPlayerProps) {
 
       <div className="flex-1 space-y-1">
         <div
-          className="h-2 bg-bulong-800 rounded-full cursor-pointer overflow-hidden"
+          className="h-2 bg-selah-800 rounded-full cursor-pointer overflow-hidden"
           onClick={handleSeek}
         >
           <div
@@ -111,7 +111,7 @@ export function AudioPlayer({ src, fallbackDuration }: AudioPlayerProps) {
             style={{ width: `${progress}%` }}
           />
         </div>
-        <div className="flex justify-between text-xs text-bulong-400 tabular-nums">
+        <div className="flex justify-between text-xs text-selah-400 tabular-nums">
           <span>{formatDuration(currentTime)}</span>
           <span>{formatDuration(duration)}</span>
         </div>

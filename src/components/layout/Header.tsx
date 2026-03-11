@@ -18,7 +18,7 @@ export function Header() {
             }
           />
           <h1 className="text-lg font-medium text-white tracking-wide">
-            Bulong
+            Selah
           </h1>
         </div>
         <DatePicker />

@@ -10,7 +10,7 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        bulong: {
+        selah: {
           950: "#050510",
           900: "#0a0a1a",
           800: "#10102a",

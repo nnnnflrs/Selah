@@ -139,7 +139,7 @@ export function UploadModal() {
           <button
             type="button"
             onClick={handleClose}
-            className="text-bulong-400 hover:text-white transition-colors"
+            className="text-selah-400 hover:text-white transition-colors"
           >
             <svg
               width="20"
@@ -157,7 +157,7 @@ export function UploadModal() {
 
         {/* Audio Section */}
         <div className="space-y-3">
-          <label className="block text-sm text-bulong-300">Audio</label>
+          <label className="block text-sm text-selah-300">Audio</label>
 
           {hasRecording ? (
             <div className="space-y-2">
@@ -169,7 +169,7 @@ export function UploadModal() {
                   resetRecorder();
                   setAudioBlobUrl("");
                 }}
-                className="text-xs text-bulong-400 hover:text-white transition-colors"
+                className="text-xs text-selah-400 hover:text-white transition-colors"
               >
                 Re-record
               </button>
@@ -181,7 +181,7 @@ export function UploadModal() {
                 <div className="text-3xl font-mono text-white tabular-nums">
                   {formatDuration(duration)}
                 </div>
-                <div className="text-xs text-bulong-500 mt-0.5">
+                <div className="text-xs text-selah-500 mt-0.5">
                   {formatDuration(MAX_DURATION)} max
                 </div>
               </div>
@@ -250,7 +250,7 @@ export function UploadModal() {
 
         {/* Location */}
         <div className="space-y-2">
-          <label className="block text-sm text-bulong-300">Location</label>
+          <label className="block text-sm text-selah-300">Location</label>
           <LocationAutocomplete
             value={locationText}
             onChange={setLocationText}
