@@ -27,7 +27,16 @@ export async function updateSession(request: NextRequest) {
 
   // This call triggers the cookie read/write cycle — refreshes
   // expired tokens and ensures auth cookies are set on the response.
-  await supabase.auth.getUser();
+  const { data: { user } } = await supabase.auth.getUser();
+
+  // Protect /journal route — require authenticated (non-anonymous) user
+  if (request.nextUrl.pathname.startsWith("/journal")) {
+    if (!user || user.is_anonymous) {
+      const url = request.nextUrl.clone();
+      url.pathname = "/";
+      return NextResponse.redirect(url);
+    }
+  }
 
   return supabaseResponse;
 }

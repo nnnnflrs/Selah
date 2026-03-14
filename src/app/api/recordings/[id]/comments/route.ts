@@ -3,6 +3,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { commentInsertSchema, uuidSchema } from "@/lib/validators";
 import { sanitizeText } from "@/lib/utils/sanitize";
 import { COMMENTS_PAGE_SIZE, MAX_COMMENT_LENGTH, MAX_NAME_LENGTH } from "@/lib/constants";
+import { getAuthUser } from "@/lib/utils/auth";
 
 export async function GET(
   request: NextRequest,
@@ -54,9 +55,9 @@ export async function POST(
     return NextResponse.json({ error: "Invalid recording ID" }, { status: 400 });
   }
 
-  const deviceId = request.headers.get("x-device-id");
-  if (!deviceId) {
-    return NextResponse.json({ error: "Missing device ID" }, { status: 401 });
+  const user = await getAuthUser();
+  if (!user) {
+    return NextResponse.json({ error: "Authentication required" }, { status: 401 });
   }
 
   const body = await request.json();
@@ -75,7 +76,7 @@ export async function POST(
     .from("comments")
     .insert({
       recording_id: params.id,
-      user_id: deviceId,
+      user_id: user.id,
       anonymous_name: sanitizeText(parsed.data.anonymous_name, MAX_NAME_LENGTH),
       content: sanitizeText(parsed.data.content, MAX_COMMENT_LENGTH),
     })

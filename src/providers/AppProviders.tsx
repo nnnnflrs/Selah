@@ -1,10 +1,10 @@
 "use client";
 
-import { useAnonymousAuth } from "@/hooks/useAnonymousAuth";
+import { useAuth } from "@/hooks/useAuth";
 import { Toaster } from "sileo";
 
 export function AppProviders({ children }: { children: React.ReactNode }) {
-  useAnonymousAuth();
+  useAuth();
 
   return (
     <>

@@ -27,8 +27,22 @@ export default function MapView() {
   const selectRecording = useMapStore((s) => s.selectRecording);
   const isAutoRotating = useMapStore((s) => s.isAutoRotating);
   const setAutoRotating = useMapStore((s) => s.setAutoRotating);
+  const selectedRecordingId = useMapStore((s) => s.selectedRecordingId);
+  const isRandomMode = useMapStore((s) => s.isRandomMode);
 
   const { recordings } = useRecordings();
+
+  // Fly to recording when navigating in random mode
+  useEffect(() => {
+    if (!isRandomMode || !selectedRecordingId) return;
+    const rec = recordings.find((r) => r.id === selectedRecordingId);
+    if (!rec) return;
+    mapRef.current?.getMap()?.flyTo({
+      center: [rec.longitude, rec.latitude],
+      zoom: 5,
+      duration: 1500,
+    });
+  }, [selectedRecordingId, isRandomMode, recordings]);
 
   // Auto-rotation via requestAnimationFrame
   useEffect(() => {

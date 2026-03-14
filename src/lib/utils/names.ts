@@ -42,3 +42,7 @@ export function generateAnonymousName(): string {
   const num = Math.floor(Math.random() * 9000) + 1000;
   return `${adj} ${noun} #${num}`;
 }
+
+export function generateVoiceId(): string {
+  return "Voice #" + crypto.randomUUID().slice(0, 4).toUpperCase();
+}

@@ -6,16 +6,16 @@ import { WaveformVisualizer } from "@/components/recording/WaveformVisualizer";
 import { AudioPlayer } from "@/components/recording/AudioPlayer";
 import { EmotionSelector } from "@/components/recording/EmotionSelector";
 import { LocationAutocomplete } from "@/components/recording/LocationAutocomplete";
+import { PublicPrivateToggle } from "@/components/journal/PublicPrivateToggle";
+import { SignInButton } from "@/components/auth/SignInButton";
 import { Button } from "@/components/ui/Button";
-import { Input } from "@/components/ui/Input";
 import { useMapStore } from "@/stores/mapStore";
 import { useRecorderStore } from "@/stores/recorderStore";
+import { useAuthStore } from "@/stores/authStore";
 import { useRecordings } from "@/hooks/useRecordings";
 import { useMediaRecorder } from "@/hooks/useMediaRecorder";
 import { useGeolocation } from "@/hooks/useGeolocation";
-import { useDeviceId } from "@/hooks/useDeviceFingerprint";
 import { sileo } from "sileo";
-import { generateAnonymousName } from "@/lib/utils/names";
 import { formatDuration } from "@/lib/utils/time";
 import { MAX_DURATION } from "@/lib/constants";
 import { Emotion } from "@/types/emotion";
@@ -23,6 +23,7 @@ import { Emotion } from "@/types/emotion";
 export function UploadModal() {
   const { isUploadModalOpen, closeUploadModal } = useMapStore();
   const resetRecorder = useRecorderStore((s) => s.reset);
+  const { isAuthenticated } = useAuthStore();
   const { refetch } = useRecordings();
   const { phase, duration, blob, analyserNode, start, stop, cancel } =
     useMediaRecorder();
@@ -34,11 +35,10 @@ export function UploadModal() {
     requestLocation,
     setCoordinates,
   } = useGeolocation();
-  const fingerprint = useDeviceId();
 
   const [emotion, setEmotion] = useState<Emotion | null>(null);
-  const [name, setName] = useState(() => generateAnonymousName());
   const [locationText, setLocationText] = useState("");
+  const [isPublic, setIsPublic] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [audioBlobUrl, setAudioBlobUrl] = useState("");
 
@@ -57,8 +57,8 @@ export function UploadModal() {
     cancel();
     resetRecorder();
     setEmotion(null);
-    setName(generateAnonymousName());
     setLocationText("");
+    setIsPublic(true);
     setAudioBlobUrl("");
     closeUploadModal();
   };
@@ -84,18 +84,20 @@ export function UploadModal() {
     setIsSubmitting(true);
 
     try {
+      const localDate = new Intl.DateTimeFormat("en-CA").format(new Date());
+
       const formData = new FormData();
       formData.append("audio", blob, "recording.webm");
       formData.append(
         "metadata",
         JSON.stringify({
-          anonymous_name: name.trim(),
           emotion,
           latitude,
           longitude,
           location_text: locationText.trim(),
           duration: Math.floor(duration),
-          device_fingerprint: fingerprint,
+          is_public: isPublic,
+          local_date: localDate,
         })
       );
 
@@ -105,7 +107,14 @@ export function UploadModal() {
       });
 
       if (res.status === 429) {
-        sileo.error({ title: "You can only post one recording per hour" });
+        sileo.error({
+          title: "You've already recorded today. Come back tomorrow.",
+        });
+        return;
+      }
+
+      if (res.status === 401) {
+        sileo.error({ title: "Please sign in to share a recording" });
         return;
       }
 
@@ -114,7 +123,11 @@ export function UploadModal() {
         throw new Error(error || "Upload failed");
       }
 
-      sileo.success({ title: "Recording shared with the world!" });
+      sileo.success({
+        title: isPublic
+          ? "Recording shared with the world!"
+          : "Recording saved to your journal!",
+      });
       handleClose();
       refetch();
     } catch (err) {
@@ -127,6 +140,41 @@ export function UploadModal() {
   };
 
   const hasRecording = phase === "stopped" && blob;
+
+  // Show sign-in prompt if not authenticated
+  if (isUploadModalOpen && !isAuthenticated) {
+    return (
+      <Modal isOpen={isUploadModalOpen} onClose={handleClose}>
+        <div className="p-6 text-center space-y-4">
+          <div className="w-12 h-12 mx-auto rounded-full bg-gradient-to-br from-glow-grateful to-glow-hopeful flex items-center justify-center">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#050510"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+              <line x1="12" y1="19" x2="12" y2="23" />
+              <line x1="8" y1="23" x2="16" y2="23" />
+            </svg>
+          </div>
+          <h2 className="text-lg font-medium text-white">
+            Sign in to record
+          </h2>
+          <p className="text-sm text-selah-400">
+            Sign in with Google to share your voice with the world. Your
+            recordings remain completely anonymous.
+          </p>
+          <SignInButton />
+        </div>
+      </Modal>
+    );
+  }
 
   return (
     <Modal isOpen={isUploadModalOpen} onClose={handleClose}>
@@ -239,14 +287,8 @@ export function UploadModal() {
         {/* Emotion */}
         <EmotionSelector value={emotion} onChange={setEmotion} />
 
-        {/* Name */}
-        <Input
-          label="Anonymous name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          maxLength={50}
-          placeholder="e.g. Drifting Owl #4291"
-        />
+        {/* Visibility Toggle */}
+        <PublicPrivateToggle isPublic={isPublic} onChange={setIsPublic} />
 
         {/* Location */}
         <div className="space-y-2">
@@ -305,7 +347,7 @@ export function UploadModal() {
             }
             className="w-full"
           >
-            Share Recording
+            {isPublic ? "Share Recording" : "Save to Journal"}
           </Button>
         </div>
       </form>

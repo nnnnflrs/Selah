@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Textarea } from "@/components/ui/Textarea";
 import { Button } from "@/components/ui/Button";
-import { useDeviceId } from "@/hooks/useDeviceFingerprint";
+import { useAuthStore } from "@/stores/authStore";
 import { sileo } from "sileo";
 import { generateAnonymousName } from "@/lib/utils/names";
 import { MAX_COMMENT_LENGTH } from "@/lib/constants";
@@ -17,13 +17,26 @@ interface CommentFormProps {
 export function CommentForm({ recordingId, onCommentAdded }: CommentFormProps) {
   const [content, setContent] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const deviceId = useDeviceId();
+  const { isAuthenticated, signIn } = useAuthStore();
+
+  if (!isAuthenticated) {
+    return (
+      <div className="text-center py-3">
+        <button
+          onClick={signIn}
+          className="text-sm text-glow-grateful hover:text-glow-grateful/80 transition-colors"
+        >
+          Sign in to leave a comment
+        </button>
+      </div>
+    );
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const trimmed = content.trim();
-    if (!trimmed || !deviceId) return;
+    if (!trimmed) return;
 
     setIsSubmitting(true);
 
@@ -32,7 +45,6 @@ export function CommentForm({ recordingId, onCommentAdded }: CommentFormProps) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "x-device-id": deviceId,
         },
         body: JSON.stringify({
           content: trimmed,

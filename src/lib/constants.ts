@@ -6,6 +6,7 @@ export const MAX_COMMENT_LENGTH = 500;
 export const MAX_NAME_LENGTH = 50;
 export const REPORTS_THRESHOLD = 5;
 export const RATE_LIMIT_HOURS = 1;
+export const DAILY_RECORDING_LIMIT = 1;
 export const COMMENTS_PAGE_SIZE = 20;
 export const RECORDINGS_PAGE_SIZE = 100;
 

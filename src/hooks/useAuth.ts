@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useAuthStore } from "@/stores/authStore";
 
-export function useAnonymousAuth() {
+export function useAuth() {
   const { setSession, setLoading, isLoading, session } = useAuthStore();
 
   useEffect(() => {
@@ -16,6 +16,7 @@ export function useAnonymousAuth() {
       if (session) {
         setSession(session);
       } else {
+        // No existing session — sign in anonymously for guest browsing
         const { data, error } = await supabase.auth.signInAnonymously();
         if (error) {
           console.error("Anonymous auth failed:", error.message);

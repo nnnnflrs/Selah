@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { uuidSchema } from "@/lib/validators";
+import { uuidSchema, togglePublicSchema } from "@/lib/validators";
+import { getAuthUser } from "@/lib/utils/auth";
 
 export async function GET(
   request: NextRequest,
@@ -14,7 +15,7 @@ export async function GET(
 
   const { data, error } = await admin
     .from("recordings")
-    .select("id, anonymous_name, emotion, audio_url, latitude, longitude, location_text, duration, created_at, is_approved, reports_count")
+    .select("id, user_id, anonymous_name, anonymous_id, emotion, audio_url, latitude, longitude, location_text, duration, is_public, created_at, is_approved, reports_count")
     .eq("id", params.id)
     .single();
 
@@ -22,7 +23,66 @@ export async function GET(
     return NextResponse.json({ error: "Recording not found" }, { status: 404 });
   }
 
+  // If recording is private, only the owner can view it
+  if (!data.is_public) {
+    const user = await getAuthUser();
+    if (!user || data.user_id !== user.id) {
+      return NextResponse.json({ error: "Recording not found" }, { status: 404 });
+    }
+  }
+
   return NextResponse.json({ data });
+}
+
+export async function PATCH(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  if (!uuidSchema.safeParse(params.id).success) {
+    return NextResponse.json({ error: "Invalid recording ID" }, { status: 400 });
+  }
+
+  const user = await getAuthUser();
+  if (!user) {
+    return NextResponse.json({ error: "Authentication required" }, { status: 401 });
+  }
+
+  const body = await request.json();
+  const parsed = togglePublicSchema.safeParse(body);
+  if (!parsed.success) {
+    return NextResponse.json({ error: "Invalid input" }, { status: 400 });
+  }
+
+  const admin = createAdminClient();
+
+  // Verify ownership
+  const { data: recording, error: fetchError } = await admin
+    .from("recordings")
+    .select("id, user_id")
+    .eq("id", params.id)
+    .single();
+
+  if (fetchError || !recording) {
+    return NextResponse.json({ error: "Recording not found" }, { status: 404 });
+  }
+
+  if (recording.user_id !== user.id) {
+    return NextResponse.json({ error: "Not authorized" }, { status: 403 });
+  }
+
+  const { data: updated, error: updateError } = await admin
+    .from("recordings")
+    .update({ is_public: parsed.data.is_public })
+    .eq("id", params.id)
+    .select()
+    .single();
+
+  if (updateError) {
+    console.error("Failed to update recording:", updateError.message);
+    return NextResponse.json({ error: "Failed to update recording" }, { status: 500 });
+  }
+
+  return NextResponse.json({ data: updated });
 }
 
 export async function DELETE(
@@ -34,14 +94,13 @@ export async function DELETE(
     return NextResponse.json({ error: "Invalid recording ID" }, { status: 400 });
   }
 
-  const deviceId = request.headers.get("x-device-id");
-  if (!deviceId) {
-    return NextResponse.json({ error: "Missing device ID" }, { status: 401 });
+  const user = await getAuthUser();
+  if (!user) {
+    return NextResponse.json({ error: "Authentication required" }, { status: 401 });
   }
 
   const admin = createAdminClient();
 
-  // Fetch the recording to verify ownership
   const { data: recording, error: fetchError } = await admin
     .from("recordings")
     .select("id, user_id, audio_url")
@@ -52,7 +111,7 @@ export async function DELETE(
     return NextResponse.json({ error: "Recording not found" }, { status: 404 });
   }
 
-  if (recording.user_id !== deviceId) {
+  if (recording.user_id !== user.id) {
     return NextResponse.json({ error: "Not authorized" }, { status: 403 });
   }
 
@@ -63,9 +122,10 @@ export async function DELETE(
     await admin.storage.from("recordings").remove([decodeURIComponent(storagePath)]);
   }
 
-  // Delete comments and reports first, then the recording
-  await admin.from("comments").delete().eq("recording_id", params.id);
-  await admin.from("reports").delete().eq("recording_id", params.id);
+  await Promise.all([
+    admin.from("comments").delete().eq("recording_id", params.id),
+    admin.from("reports").delete().eq("recording_id", params.id),
+  ]);
 
   const { error: deleteError } = await admin
     .from("recordings")

@@ -1,30 +1,52 @@
 "use client";
 
 import { DatePicker } from "./DatePicker";
+import { SignInButton } from "@/components/auth/SignInButton";
+import { UserMenu } from "@/components/auth/UserMenu";
+import { useAuthStore } from "@/stores/authStore";
+
+function SelahLogo() {
+  return (
+    <svg
+      width="22"
+      height="22"
+      viewBox="0 0 32 32"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      {/* Solana-inspired angular S — three bars with directional arrow edges */}
+      {/* Top bar: arrow points right (angled left edge) */}
+      <path d="M5 10 L10 5 H27 V10 Z" fill="white" />
+      {/* Middle bar: arrow points left (angled right edge) */}
+      <path d="M5 14 V19 H22 L27 14 Z" fill="white" />
+      {/* Bottom bar: arrow points right (angled left edge) */}
+      <path d="M5 27 L10 22 H27 V27 Z" fill="white" />
+    </svg>
+  );
+}
 
 export function Header() {
+  const { isAuthenticated, isLoading } = useAuthStore();
+
   return (
     <header className="absolute top-0 left-0 right-0 z-[1000] pointer-events-none">
       <div className="flex items-center justify-between p-4 pointer-events-auto max-w-screen-2xl mx-auto">
         <div className="flex items-center gap-2">
-          <div
-            className="w-3 h-3 rounded-full animate-pulse-glow"
-            style={
-              {
-                "--glow-color": "#00f0ff",
-                backgroundColor: "#00f0ff",
-                boxShadow: "0 0 8px 2px #00f0ff",
-              } as React.CSSProperties
-            }
-          />
+          <SelahLogo />
           <h1 className="text-lg font-medium text-white tracking-wide">
             Selah
           </h1>
+        </div>
+        <div className="flex items-center gap-2 sm:gap-3">
+          {!isLoading && (
+            isAuthenticated ? <UserMenu /> : <SignInButton />
+          )}
+          <DatePicker />
           <a
             href="https://github.com/nnnnflrs/Selah"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-white/60 hover:text-white transition-colors"
+            className="text-white/40 hover:text-white/80 transition-colors"
             aria-label="GitHub"
           >
             <svg
@@ -37,7 +59,6 @@ export function Header() {
             </svg>
           </a>
         </div>
-        <DatePicker />
       </div>
     </header>
   );

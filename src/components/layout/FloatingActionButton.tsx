@@ -1,16 +1,28 @@
 "use client";
 
 import { useMapStore } from "@/stores/mapStore";
+import { useAuthStore } from "@/stores/authStore";
+import { sileo } from "sileo";
 
 export function FloatingActionButton() {
   const openUploadModal = useMapStore((s) => s.openUploadModal);
+  const { isAuthenticated, signIn } = useAuthStore();
+
+  const handleClick = () => {
+    if (!isAuthenticated) {
+      sileo.info({ title: "Sign in with Google to share a recording" });
+      signIn();
+      return;
+    }
+    openUploadModal();
+  };
 
   return (
     <button
-      onClick={openUploadModal}
+      onClick={handleClick}
       className="
-        fixed bottom-8 right-8 z-[1000]
-        w-14 h-14 rounded-full
+        fixed bottom-6 right-4 sm:bottom-8 sm:right-8 z-[1000]
+        w-12 h-12 sm:w-14 sm:h-14 rounded-full
         bg-gradient-to-br from-glow-grateful to-glow-hopeful
         shadow-lg shadow-glow-grateful/20
         flex items-center justify-center

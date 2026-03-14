@@ -12,7 +12,7 @@ interface RandomListenButtonProps {
 
 export function RandomListenButton({ mapRef }: RandomListenButtonProps) {
   const { recordings } = useRecordings();
-  const selectRecording = useMapStore((s) => s.selectRecording);
+  const pushRandomRecording = useMapStore((s) => s.pushRandomRecording);
 
   const handleClick = useCallback(() => {
     if (recordings.length === 0) {
@@ -28,16 +28,16 @@ export function RandomListenButton({ mapRef }: RandomListenButtonProps) {
       duration: 1500,
     });
 
-    selectRecording(random.id);
-  }, [recordings, mapRef, selectRecording]);
+    pushRandomRecording(random.id);
+  }, [recordings, mapRef, pushRandomRecording]);
 
   return (
     <button
       onClick={handleClick}
       className="
-        absolute bottom-8 left-8 z-[1000]
+        absolute bottom-6 left-4 sm:bottom-8 sm:left-8 z-[1000]
         flex items-center gap-2
-        px-4 py-2.5 rounded-full
+        px-3 py-2 sm:px-4 sm:py-2.5 rounded-full
         bg-selah-800/80 border border-selah-600
         text-selah-300 hover:text-white
         hover:bg-selah-700/80 hover:border-selah-500
@@ -63,7 +63,8 @@ export function RandomListenButton({ mapRef }: RandomListenButtonProps) {
         <line x1="15" y1="15" x2="21" y2="21" />
         <line x1="4" y1="4" x2="9" y2="9" />
       </svg>
-      <span className="text-sm font-medium">Listen to random story</span>
+      <span className="text-sm font-medium hidden sm:inline">Listen to random story</span>
+      <span className="text-sm font-medium sm:hidden">Random</span>
     </button>
   );
 }

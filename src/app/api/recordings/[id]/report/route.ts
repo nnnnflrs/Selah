@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { uuidSchema } from "@/lib/validators";
+import { getAuthUser } from "@/lib/utils/auth";
 
 export async function POST(
   request: NextRequest,
@@ -10,9 +11,9 @@ export async function POST(
     return NextResponse.json({ error: "Invalid recording ID" }, { status: 400 });
   }
 
-  const deviceId = request.headers.get("x-device-id");
-  if (!deviceId) {
-    return NextResponse.json({ error: "Missing device ID" }, { status: 401 });
+  const user = await getAuthUser();
+  if (!user) {
+    return NextResponse.json({ error: "Authentication required" }, { status: 401 });
   }
 
   const admin = createAdminClient();
@@ -22,7 +23,7 @@ export async function POST(
     .from("reports")
     .select("id")
     .eq("recording_id", params.id)
-    .eq("user_id", deviceId)
+    .eq("user_id", user.id)
     .single();
 
   if (existing) {
@@ -35,7 +36,7 @@ export async function POST(
   // Insert report
   const { error: reportError } = await admin.from("reports").insert({
     recording_id: params.id,
-    user_id: deviceId,
+    user_id: user.id,
   });
 
   if (reportError) {

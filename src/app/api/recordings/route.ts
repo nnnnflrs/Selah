@@ -1,9 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { boundsSchema, recordingMetadataSchema } from "@/lib/validators";
+import { boundsSchema, recordingMetadataSchemaV2 } from "@/lib/validators";
 import { sanitizeText } from "@/lib/utils/sanitize";
-import { RECORDINGS_PAGE_SIZE, MAX_NAME_LENGTH, RATE_LIMIT_HOURS } from "@/lib/constants";
+import { RECORDINGS_PAGE_SIZE, DAILY_RECORDING_LIMIT } from "@/lib/constants";
 import { isValidAudioType, isValidAudioSize } from "@/lib/utils/audio";
+import { getAuthUser } from "@/lib/utils/auth";
+import { generateVoiceId } from "@/lib/utils/names";
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -25,24 +27,24 @@ export async function GET(request: NextRequest) {
     RECORDINGS_PAGE_SIZE,
     Number(searchParams.get("limit")) || RECORDINGS_PAGE_SIZE
   );
-  const dateParam = searchParams.get("date"); // YYYY-MM-DD or null
+  const dateParam = searchParams.get("date");
 
   const admin = createAdminClient();
 
   let query = admin
     .from("recordings")
     .select(
-      "id, anonymous_name, emotion, latitude, longitude, created_at",
+      "id, anonymous_name, anonymous_id, emotion, latitude, longitude, created_at",
       { count: "exact" }
     )
     .eq("is_approved", true)
+    .eq("is_public", true)
     .lte("reports_count", 5)
     .gte("latitude", south)
     .lte("latitude", north)
     .gte("longitude", west)
     .lte("longitude", east);
 
-  // Filter by date if provided
   if (dateParam && /^\d{4}-\d{2}-\d{2}$/.test(dateParam)) {
     const startOfDay = `${dateParam}T00:00:00.000Z`;
     const nextDay = new Date(dateParam + "T00:00:00.000Z");
@@ -64,6 +66,15 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
+  // Require authenticated (non-anonymous) user
+  const user = await getAuthUser();
+  if (!user) {
+    return NextResponse.json(
+      { error: "Authentication required" },
+      { status: 401 }
+    );
+  }
+
   const admin = createAdminClient();
 
   const formData = await request.formData();
@@ -101,7 +112,7 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const parsed = recordingMetadataSchema.safeParse(metadata);
+  const parsed = recordingMetadataSchemaV2.safeParse(metadata);
   if (!parsed.success) {
     return NextResponse.json(
       { error: "Invalid input" },
@@ -111,22 +122,24 @@ export async function POST(request: NextRequest) {
 
   const meta = parsed.data;
 
-  // Check rate limit (skip if DISABLE_RATE_LIMIT is set)
+  // Daily recording limit check (skip if DISABLE_RATE_LIMIT is set)
   if (process.env.DISABLE_RATE_LIMIT !== "true") {
-    const cutoff = new Date(Date.now() - RATE_LIMIT_HOURS * 60 * 60 * 1000).toISOString();
+    const startOfDay = `${meta.local_date}T00:00:00.000Z`;
+    const nextDay = new Date(meta.local_date + "T00:00:00.000Z");
+    nextDay.setUTCDate(nextDay.getUTCDate() + 1);
+    const endOfDay = nextDay.toISOString();
 
-    const { data: recent, error: rateLimitError } = await admin
-      .from("rate_limits")
-      .select("last_recording_at")
-      .eq("device_fingerprint", meta.device_fingerprint)
-      .gte("last_recording_at", cutoff)
-      .limit(1);
+    const { data: existing } = await admin
+      .from("recordings")
+      .select("id")
+      .eq("user_id", user.id)
+      .gte("created_at", startOfDay)
+      .lt("created_at", endOfDay)
+      .limit(DAILY_RECORDING_LIMIT);
 
-    if (rateLimitError) {
-      console.error("Rate limit check error:", rateLimitError.message);
-    } else if (recent && recent.length > 0) {
+    if (existing && existing.length >= DAILY_RECORDING_LIMIT) {
       return NextResponse.json(
-        { error: "You can only post one recording per hour." },
+        { error: "You've already recorded today. Come back tomorrow." },
         { status: 429 }
       );
     }
@@ -156,18 +169,23 @@ export async function POST(request: NextRequest) {
     data: { publicUrl },
   } = admin.storage.from("recordings").getPublicUrl(storagePath);
 
+  // Generate anonymous voice ID
+  const anonymousId = generateVoiceId();
+
   // Insert recording
   const { data: recording, error: insertError } = await admin
     .from("recordings")
     .insert({
-      user_id: meta.device_fingerprint,
-      anonymous_name: sanitizeText(meta.anonymous_name, MAX_NAME_LENGTH),
+      user_id: user.id,
+      anonymous_name: anonymousId,
+      anonymous_id: anonymousId,
       emotion: meta.emotion,
       audio_url: publicUrl,
       latitude: meta.latitude,
       longitude: meta.longitude,
       location_text: sanitizeText(meta.location_text || "", 100),
       duration: meta.duration,
+      is_public: meta.is_public,
       is_approved: true,
     })
     .select()
@@ -175,25 +193,12 @@ export async function POST(request: NextRequest) {
 
   if (insertError) {
     console.error("Failed to save recording:", insertError.message);
-    // Clean up orphaned storage file
     await admin.storage.from("recordings").remove([storagePath]);
     return NextResponse.json(
       { error: "Failed to save recording" },
       { status: 500 }
     );
   }
-
-  // Update rate limit
-  await admin
-    .from("rate_limits")
-    .upsert(
-      {
-        device_fingerprint: meta.device_fingerprint,
-        user_id: meta.device_fingerprint,
-        last_recording_at: new Date().toISOString(),
-      },
-      { onConflict: "device_fingerprint,user_id" }
-    );
 
   return NextResponse.json({ data: recording }, { status: 201 });
 }
