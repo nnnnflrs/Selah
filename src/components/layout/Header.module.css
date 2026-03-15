@@ -40,6 +40,10 @@
 }
 
 .infoButton {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
   color: rgba(255, 255, 255, 0.3);
   transition: color 0.15s ease;
   margin-left: 0.25rem;
@@ -73,7 +77,21 @@
 .modalTitleRow {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  justify-content: space-between;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  padding: 0.25rem;
+  cursor: pointer;
+  color: var(--selah-400);
+  transition: color 0.15s ease;
+  border-radius: 0.375rem;
+}
+
+.closeButton:hover {
+  color: white;
 }
 
 .modalTitle {
