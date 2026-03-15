@@ -13,6 +13,8 @@ interface RandomListenButtonProps {
 export function RandomListenButton({ mapRef }: RandomListenButtonProps) {
   const { recordings } = useRecordings();
   const pushRandomRecording = useMapStore((s) => s.pushRandomRecording);
+  const isRecordingModalOpen = useMapStore((s) => s.isRecordingModalOpen);
+  const isUploadModalOpen = useMapStore((s) => s.isUploadModalOpen);
 
   const handleClick = useCallback(() => {
     if (recordings.length === 0) {
@@ -31,11 +33,14 @@ export function RandomListenButton({ mapRef }: RandomListenButtonProps) {
     pushRandomRecording(random.id);
   }, [recordings, mapRef, pushRandomRecording]);
 
+  const hidden = isRecordingModalOpen || isUploadModalOpen;
+
   return (
     <button
       onClick={handleClick}
-      className="
+      className={`
         absolute bottom-32 left-4 pb-[env(safe-area-inset-bottom)] sm:bottom-8 sm:left-8 z-[1000]
+        ${hidden ? "hidden" : ""}
         flex items-center gap-2
         px-3 py-2 sm:px-4 sm:py-2.5 rounded-full
         bg-selah-800/80 border border-selah-600
@@ -44,7 +49,7 @@ export function RandomListenButton({ mapRef }: RandomListenButtonProps) {
         shadow-lg shadow-black/20
         transition-all duration-200
         hover:scale-105 active:scale-95
-      "
+      `}
       aria-label="Listen to a random recording"
     >
       <svg

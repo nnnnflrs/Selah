@@ -15,6 +15,8 @@ interface MapControlsProps {
 export function MapControls({ mapRef }: MapControlsProps) {
   const setAutoRotating = useMapStore((s) => s.setAutoRotating);
   const openUploadModal = useMapStore((s) => s.openUploadModal);
+  const isRecordingModalOpen = useMapStore((s) => s.isRecordingModalOpen);
+  const isUploadModalOpen = useMapStore((s) => s.isUploadModalOpen);
   const { isAuthenticated, signIn } = useAuthStore();
 
   const handleZoomIn = useCallback(() => {
@@ -83,8 +85,10 @@ export function MapControls({ mapRef }: MapControlsProps) {
     openUploadModal();
   }, [isAuthenticated, signIn, openUploadModal]);
 
+  const hidden = isRecordingModalOpen || isUploadModalOpen;
+
   return (
-    <div className="absolute bottom-32 right-4 pb-[env(safe-area-inset-bottom)] sm:bottom-24 z-[1000] flex flex-col gap-2">
+    <div className={`absolute bottom-32 right-4 pb-[env(safe-area-inset-bottom)] sm:bottom-24 z-[1000] flex flex-col gap-2 ${hidden ? "hidden" : ""}`}>
       <button
         onClick={handleRecord}
         className="
