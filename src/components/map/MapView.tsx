@@ -1,12 +1,14 @@
 "use client";
 
-import { useRef, useCallback, useEffect } from "react";
+import { useRef, useState, useCallback, useEffect } from "react";
 import Map, { Marker, MapRef } from "react-map-gl/mapbox";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { useMapStore } from "@/stores/mapStore";
 import { useRecordings } from "@/hooks/useRecordings";
+import { useJournalStore } from "@/stores/journalStore";
 import { MapControls } from "./MapControls";
 import { RandomListenButton } from "@/components/layout/RandomListenButton";
+import { MyRecordingsBanner } from "@/components/map/MyRecordingsBanner";
 import {
   EMOTIONS,
   MAPBOX_STYLE,
@@ -23,14 +25,30 @@ export default function MapView() {
   const mapRef = useRef<MapRef>(null);
   const rotationRef = useRef<number | null>(null);
   const hoveredCountryRef = useRef<string | number | null>(null);
+  const [mapLoaded, setMapLoaded] = useState(false);
 
   const selectRecording = useMapStore((s) => s.selectRecording);
   const isAutoRotating = useMapStore((s) => s.isAutoRotating);
   const setAutoRotating = useMapStore((s) => s.setAutoRotating);
   const selectedRecordingId = useMapStore((s) => s.selectedRecordingId);
   const isRandomMode = useMapStore((s) => s.isRandomMode);
+  const showMyRecordings = useMapStore((s) => s.showMyRecordings);
 
-  const { recordings } = useRecordings();
+  const { recordings: publicRecordings } = useRecordings();
+  const journalRecordings = useJournalStore((s) => s.recordings);
+
+  // When showing my recordings, map journal entries to marker format
+  const recordings = showMyRecordings
+    ? journalRecordings.map((r) => ({
+        id: r.id,
+        emotion: r.emotion,
+        latitude: r.latitude,
+        longitude: r.longitude,
+        anonymous_name: r.anonymous_name,
+        anonymous_id: r.anonymous_id,
+        created_at: r.created_at,
+      }))
+    : publicRecordings;
 
   // Fly to recording when navigating in random mode
   useEffect(() => {
@@ -43,6 +61,46 @@ export default function MapView() {
       duration: 1500,
     });
   }, [selectedRecordingId, isRandomMode, recordings]);
+
+  // Fit map bounds to journal recordings
+  const fitToMyRecordings = useCallback(() => {
+    const map = mapRef.current?.getMap();
+    const recs = useJournalStore.getState().recordings;
+    if (!map || recs.length === 0) return;
+
+    if (recs.length === 1) {
+      map.flyTo({
+        center: [recs[0].longitude, recs[0].latitude],
+        zoom: 8,
+        duration: 1500,
+      });
+      return;
+    }
+
+    let minLng = Infinity, maxLng = -Infinity;
+    let minLat = Infinity, maxLat = -Infinity;
+    for (const r of recs) {
+      if (r.longitude < minLng) minLng = r.longitude;
+      if (r.longitude > maxLng) maxLng = r.longitude;
+      if (r.latitude < minLat) minLat = r.latitude;
+      if (r.latitude > maxLat) maxLat = r.latitude;
+    }
+
+    const lngSpread = maxLng - minLng;
+    const latSpread = maxLat - minLat;
+    const padding = lngSpread < 1 && latSpread < 1 ? 80 : 60;
+
+    map.fitBounds(
+      [[minLng, minLat], [maxLng, maxLat]],
+      { padding, duration: 1500, maxZoom: 12 }
+    );
+  }, []);
+
+  // Trigger fit when showMyRecordings activates and map is ready
+  useEffect(() => {
+    if (!showMyRecordings || !mapLoaded) return;
+    fitToMyRecordings();
+  }, [showMyRecordings, mapLoaded, fitToMyRecordings]);
 
   // Auto-rotation via requestAnimationFrame
   useEffect(() => {
@@ -163,7 +221,9 @@ export default function MapView() {
       }
       canvas.style.cursor = "";
     });
-  }, []);
+
+    setMapLoaded(true);
+  }, [fitToMyRecordings]);
 
   return (
     <div className="h-full w-full relative">
@@ -215,6 +275,7 @@ export default function MapView() {
         <MapControls mapRef={mapRef} />
       </Map>
       <RandomListenButton mapRef={mapRef} />
+      <MyRecordingsBanner mapRef={mapRef} />
     </div>
   );
 }

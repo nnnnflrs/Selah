@@ -1,9 +1,19 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useMapStore } from "@/stores/mapStore";
 import { JournalList } from "@/components/journal/JournalList";
 
 export default function JournalPage() {
+  const router = useRouter();
+  const setShowMyRecordings = useMapStore((s) => s.setShowMyRecordings);
+
+  const handleViewOnGlobe = () => {
+    setShowMyRecordings(true);
+    router.push("/");
+  };
+
   return (
     <div className="min-h-screen bg-selah-950">
       {/* Header */}
@@ -31,9 +41,9 @@ export default function JournalPage() {
             </Link>
             <h1 className="text-lg font-medium text-white">My Journal</h1>
           </div>
-          <Link
-            href="/"
-            className="text-sm text-selah-400 hover:text-white transition-colors flex items-center gap-1.5"
+          <button
+            onClick={handleViewOnGlobe}
+            className="text-sm px-3 py-1.5 bg-selah-700 hover:bg-selah-600 text-white rounded-full transition-colors flex items-center gap-1.5"
           >
             <svg
               width="14"
@@ -49,8 +59,8 @@ export default function JournalPage() {
               <line x1="2" y1="12" x2="22" y2="12" />
               <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
             </svg>
-            Globe
-          </Link>
+            View on Globe
+          </button>
         </div>
       </header>
 

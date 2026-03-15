@@ -15,6 +15,9 @@ interface MapState {
   randomIndex: number;
   isRandomMode: boolean;
 
+  // My recordings on globe
+  showMyRecordings: boolean;
+
   setAutoRotating: (rotating: boolean) => void;
 
   selectRecording: (id: string) => void;
@@ -22,6 +25,7 @@ interface MapState {
   openUploadModal: () => void;
   closeUploadModal: () => void;
   setSelectedDate: (date: string | null) => void;
+  setShowMyRecordings: (show: boolean) => void;
 
   // Random navigation
   pushRandomRecording: (id: string) => void;
@@ -40,6 +44,8 @@ export const useMapStore = create<MapState>((set, get) => ({
   randomHistory: [],
   randomIndex: -1,
   isRandomMode: false,
+
+  showMyRecordings: false,
 
   setAutoRotating: (isAutoRotating) => set({ isAutoRotating }),
 
@@ -60,6 +66,7 @@ export const useMapStore = create<MapState>((set, get) => ({
   openUploadModal: () => set({ isUploadModalOpen: true }),
   closeUploadModal: () => set({ isUploadModalOpen: false }),
   setSelectedDate: (selectedDate) => set({ selectedDate }),
+  setShowMyRecordings: (showMyRecordings) => set({ showMyRecordings }),
 
   pushRandomRecording: (id) => {
     const { randomHistory, randomIndex } = get();

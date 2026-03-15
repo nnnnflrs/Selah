@@ -17,7 +17,7 @@ export function PublicPrivateToggle({
       <div className="flex gap-2">
         <button
           type="button"
-          disabled={disabled}
+          disabled={disabled || isPublic}
           onClick={() => onChange(true)}
           className={`
             flex-1 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200
@@ -26,7 +26,7 @@ export function PublicPrivateToggle({
                 ? "bg-glow-grateful/20 text-glow-grateful border border-glow-grateful/30"
                 : "bg-selah-800 text-selah-400 border border-selah-700 hover:border-selah-600"
             }
-            ${disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}
+            ${disabled || isPublic ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}
           `}
         >
           <div className="flex items-center justify-center gap-1.5">
@@ -50,7 +50,7 @@ export function PublicPrivateToggle({
         </button>
         <button
           type="button"
-          disabled={disabled}
+          disabled={disabled || !isPublic}
           onClick={() => onChange(false)}
           className={`
             flex-1 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200
@@ -59,7 +59,7 @@ export function PublicPrivateToggle({
                 ? "bg-glow-nostalgic/20 text-glow-nostalgic border border-glow-nostalgic/30"
                 : "bg-selah-800 text-selah-400 border border-selah-700 hover:border-selah-600"
             }
-            ${disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}
+            ${disabled || !isPublic ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}
           `}
         >
           <div className="flex items-center justify-center gap-1.5">
