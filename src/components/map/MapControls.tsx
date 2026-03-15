@@ -72,7 +72,7 @@ export function MapControls({ mapRef }: MapControlsProps) {
   }, [mapRef, setAutoRotating]);
 
   return (
-    <div className="absolute bottom-20 right-4 sm:bottom-24 z-[1000] flex flex-col gap-2">
+    <div className="absolute bottom-24 right-4 pb-[env(safe-area-inset-bottom)] sm:bottom-24 z-[1000] flex flex-col gap-2">
       <IconButton label="Zoom in" onClick={handleZoomIn}>
         <svg
           width="18"
