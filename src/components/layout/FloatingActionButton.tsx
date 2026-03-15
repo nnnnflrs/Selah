@@ -21,8 +21,9 @@ export function FloatingActionButton() {
     <button
       onClick={handleClick}
       className="
-        fixed bottom-24 right-16 pb-[env(safe-area-inset-bottom)] sm:bottom-24 sm:right-20 z-[1000]
-        w-12 h-12 sm:w-14 sm:h-14 rounded-full
+        fixed bottom-[calc(theme(spacing.24)+theme(spacing.44)+env(safe-area-inset-bottom))] right-4
+        sm:bottom-[calc(theme(spacing.24)+theme(spacing.44))] sm:right-4 z-[1000]
+        w-10 h-10 sm:w-12 sm:h-12 rounded-full
         bg-gradient-to-br from-glow-grateful to-glow-hopeful
         shadow-lg shadow-glow-grateful/20
         flex items-center justify-center

@@ -35,7 +35,7 @@ export function RandomListenButton({ mapRef }: RandomListenButtonProps) {
     <button
       onClick={handleClick}
       className="
-        absolute bottom-24 left-4 pb-[env(safe-area-inset-bottom)] sm:bottom-8 sm:left-8 z-[1000]
+        absolute bottom-32 left-4 pb-[env(safe-area-inset-bottom)] sm:bottom-8 sm:left-8 z-[1000]
         flex items-center gap-2
         px-3 py-2 sm:px-4 sm:py-2.5 rounded-full
         bg-selah-800/80 border border-selah-600
