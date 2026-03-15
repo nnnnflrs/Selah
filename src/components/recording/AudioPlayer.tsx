@@ -2,6 +2,7 @@
 
 import { useRef, useState, useEffect } from "react";
 import { formatDuration } from "@/lib/utils/time";
+import styles from "./AudioPlayer.module.css";
 
 interface AudioPlayerProps {
   src: string;
@@ -70,12 +71,12 @@ export function AudioPlayer({ src, fallbackDuration }: AudioPlayerProps) {
   const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
 
   return (
-    <div className="flex items-center gap-3">
+    <div className={styles.container}>
       <audio ref={audioRef} src={src} preload="metadata" />
 
       <button
         onClick={togglePlay}
-        className="w-10 h-10 flex-shrink-0 flex items-center justify-center rounded-full bg-selah-700 hover:bg-selah-600 border border-selah-500 transition-colors"
+        className={styles.playButton}
       >
         {isPlaying ? (
           <svg
@@ -83,7 +84,7 @@ export function AudioPlayer({ src, fallbackDuration }: AudioPlayerProps) {
             height="16"
             viewBox="0 0 24 24"
             fill="currentColor"
-            className="text-white"
+            className={styles.icon}
           >
             <rect x="6" y="4" width="4" height="16" rx="1" />
             <rect x="14" y="4" width="4" height="16" rx="1" />
@@ -94,24 +95,24 @@ export function AudioPlayer({ src, fallbackDuration }: AudioPlayerProps) {
             height="16"
             viewBox="0 0 24 24"
             fill="currentColor"
-            className="text-white ml-0.5"
+            className={styles.iconPlay}
           >
             <polygon points="5,3 19,12 5,21" />
           </svg>
         )}
       </button>
 
-      <div className="flex-1 space-y-1">
+      <div className={styles.trackContainer}>
         <div
-          className="h-2 bg-selah-800 rounded-full cursor-pointer overflow-hidden"
+          className={styles.progressBar}
           onClick={handleSeek}
         >
           <div
-            className="h-full bg-gradient-to-r from-glow-grateful to-glow-hopeful rounded-full transition-[width] duration-100"
+            className={styles.progressFill}
             style={{ width: `${progress}%` }}
           />
         </div>
-        <div className="flex justify-between text-xs text-selah-400 tabular-nums">
+        <div className={styles.timeRow}>
           <span>{formatDuration(currentTime)}</span>
           <span>{formatDuration(duration)}</span>
         </div>

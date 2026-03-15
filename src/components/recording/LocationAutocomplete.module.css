@@ -1,0 +1,57 @@
+.container {
+  position: relative;
+}
+
+.input {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  background-color: #10102a;
+  border: 1px solid #2a2a4a;
+  color: #ffffff;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.input::placeholder {
+  color: #3a3a5a;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #5a5a7a;
+  box-shadow: 0 0 0 1px #5a5a7a;
+}
+
+.dropdown {
+  position: absolute;
+  z-index: 50;
+  margin-top: 0.25rem;
+  width: 100%;
+  border-radius: 0.5rem;
+  border: 1px solid #2a2a4a;
+  background-color: rgba(16, 16, 42, 0.95);
+  backdrop-filter: blur(4px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.suggestion {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+  color: #8a8aaa;
+}
+
+.suggestion:hover {
+  background-color: #1a1a3a;
+  color: #ffffff;
+}
+
+.suggestionActive {
+  background-color: #2a2a4a;
+  color: #ffffff;
+}

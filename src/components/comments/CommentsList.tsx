@@ -5,6 +5,7 @@ import { CommentItem } from "./CommentItem";
 import { CommentForm } from "./CommentForm";
 import { Button } from "@/components/ui/Button";
 import { Spinner } from "@/components/ui/Spinner";
+import styles from "./CommentsList.module.css";
 
 interface CommentsListProps {
   recordingId: string;
@@ -15,16 +16,16 @@ export function CommentsList({ recordingId }: CommentsListProps) {
     useRealtimeComments(recordingId);
 
   return (
-    <div className="space-y-4">
+    <div className={styles.container}>
       <CommentForm recordingId={recordingId} onCommentAdded={addComment} />
 
-      <div className="space-y-0">
+      <div className={styles.commentsContainer}>
         {isLoading ? (
-          <div className="flex justify-center py-6">
+          <div className={styles.loadingWrapper}>
             <Spinner size={20} />
           </div>
         ) : comments.length === 0 ? (
-          <p className="text-sm text-selah-500 text-center py-6">
+          <p className={styles.emptyMessage}>
             No comments yet. Be the first to share a thought.
           </p>
         ) : (
@@ -33,7 +34,7 @@ export function CommentsList({ recordingId }: CommentsListProps) {
               <CommentItem key={comment.id} comment={comment} />
             ))}
             {hasMore && (
-              <div className="pt-2 text-center">
+              <div className={styles.loadMoreWrapper}>
                 <Button variant="ghost" onClick={loadMore}>
                   Load more
                 </Button>

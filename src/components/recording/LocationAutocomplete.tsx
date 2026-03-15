@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
+import styles from "./LocationAutocomplete.module.css";
 
 const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
 
@@ -106,7 +107,7 @@ export function LocationAutocomplete({
   }, []);
 
   return (
-    <div ref={containerRef} className="relative">
+    <div ref={containerRef} className={styles.container}>
       <input
         type="text"
         value={value}
@@ -115,24 +116,15 @@ export function LocationAutocomplete({
         onFocus={() => suggestions.length > 0 && setIsOpen(true)}
         placeholder="Search for a place (e.g. Brooklyn, NY)"
         maxLength={100}
-        className="
-          w-full px-3 py-2 rounded-lg text-sm
-          bg-selah-800 border border-selah-600
-          text-white placeholder-selah-500
-          focus:outline-none focus:border-selah-400 focus:ring-1 focus:ring-selah-400
-          transition-colors duration-150
-        "
+        className={styles.input}
       />
 
       {isOpen && suggestions.length > 0 && (
-        <ul className="absolute z-50 mt-1 w-full rounded-lg border border-selah-600 bg-selah-800/95 backdrop-blur-sm shadow-lg overflow-hidden">
+        <ul className={styles.dropdown}>
           {suggestions.map((s, i) => (
             <li
               key={s.id}
-              className={`
-                px-3 py-2 text-sm cursor-pointer transition-colors
-                ${i === activeIndex ? "bg-selah-600 text-white" : "text-selah-300 hover:bg-selah-700 hover:text-white"}
-              `}
+              className={`${styles.suggestion} ${i === activeIndex ? styles.suggestionActive : ''}`}
               onMouseEnter={() => setActiveIndex(i)}
               onClick={() => handleSelect(s)}
             >

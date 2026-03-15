@@ -2,6 +2,7 @@
 
 import { useEffect, useCallback, useRef } from "react";
 import { createPortal } from "react-dom";
+import styles from "./Modal.module.css";
 
 interface ModalProps {
   isOpen: boolean;
@@ -36,21 +37,16 @@ export function Modal({ isOpen, onClose, children, className = "" }: ModalProps)
   return createPortal(
     <div
       ref={overlayRef}
-      className="fixed inset-0 z-50 flex items-start sm:items-center justify-center p-4 pt-16 sm:pt-4"
+      className={styles.overlay}
       onClick={(e) => {
         if (e.target === overlayRef.current) onClose();
       }}
     >
-      <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
+      <div className={styles.backdrop} />
       <div
         role="dialog"
         aria-modal="true"
-        className={`
-          relative z-10 w-full max-w-lg max-h-[90vh] overflow-y-auto
-          bg-selah-900 border border-selah-600 rounded-2xl
-          shadow-2xl animate-fade-in
-          ${className}
-        `}
+        className={`${styles.dialog} ${className}`}
       >
         {children}
       </div>

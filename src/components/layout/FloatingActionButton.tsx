@@ -3,6 +3,7 @@
 import { useMapStore } from "@/stores/mapStore";
 import { useAuthStore } from "@/stores/authStore";
 import { sileo } from "sileo";
+import styles from "./FloatingActionButton.module.css";
 
 export function FloatingActionButton() {
   const openUploadModal = useMapStore((s) => s.openUploadModal);
@@ -20,16 +21,7 @@ export function FloatingActionButton() {
   return (
     <button
       onClick={handleClick}
-      className="
-        fixed bottom-[calc(theme(spacing.24)+theme(spacing.44)+env(safe-area-inset-bottom))] right-4
-        sm:bottom-[calc(theme(spacing.24)+theme(spacing.44))] sm:right-4 z-[1000]
-        w-10 h-10 sm:w-12 sm:h-12 rounded-full
-        bg-gradient-to-br from-glow-grateful to-glow-hopeful
-        shadow-lg shadow-glow-grateful/20
-        flex items-center justify-center
-        hover:scale-110 active:scale-95
-        transition-transform duration-200
-      "
+      className={styles.fab}
       aria-label="Record audio"
     >
       <svg

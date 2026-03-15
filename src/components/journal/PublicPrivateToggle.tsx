@@ -1,5 +1,7 @@
 "use client";
 
+import styles from "./PublicPrivateToggle.module.css";
+
 interface PublicPrivateToggleProps {
   isPublic: boolean;
   onChange: (isPublic: boolean) => void;
@@ -12,24 +14,20 @@ export function PublicPrivateToggle({
   disabled = false,
 }: PublicPrivateToggleProps) {
   return (
-    <div className="space-y-1.5">
-      <label className="block text-sm text-selah-300">Visibility</label>
-      <div className="flex gap-2">
+    <div className={styles.container}>
+      <label className={styles.label}>Visibility</label>
+      <div className={styles.buttonGroup}>
         <button
           type="button"
           disabled={disabled || isPublic}
           onClick={() => onChange(true)}
-          className={`
-            flex-1 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200
-            ${
-              isPublic
-                ? "bg-glow-grateful/20 text-glow-grateful border border-glow-grateful/30"
-                : "bg-selah-800 text-selah-400 border border-selah-700 hover:border-selah-600"
-            }
-            ${disabled || isPublic ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}
-          `}
+          className={`${styles.toggleButton} ${
+            isPublic
+              ? `${styles.toggleButtonActive} ${styles.public}`
+              : styles.toggleButtonInactive
+          } ${disabled || isPublic ? styles.toggleButtonDisabled : ''}`}
         >
-          <div className="flex items-center justify-center gap-1.5">
+          <div className={styles.buttonContent}>
             <svg
               width="14"
               height="14"
@@ -46,23 +44,19 @@ export function PublicPrivateToggle({
             </svg>
             Public
           </div>
-          <p className="text-xs mt-0.5 opacity-70">Visible on globe</p>
+          <p className={styles.buttonHint}>Visible on globe</p>
         </button>
         <button
           type="button"
           disabled={disabled || !isPublic}
           onClick={() => onChange(false)}
-          className={`
-            flex-1 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200
-            ${
-              !isPublic
-                ? "bg-glow-nostalgic/20 text-glow-nostalgic border border-glow-nostalgic/30"
-                : "bg-selah-800 text-selah-400 border border-selah-700 hover:border-selah-600"
-            }
-            ${disabled || !isPublic ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}
-          `}
+          className={`${styles.toggleButton} ${
+            !isPublic
+              ? `${styles.toggleButtonActive} ${styles.private}`
+              : styles.toggleButtonInactive
+          } ${disabled || !isPublic ? styles.toggleButtonDisabled : ''}`}
         >
-          <div className="flex items-center justify-center gap-1.5">
+          <div className={styles.buttonContent}>
             <svg
               width="14"
               height="14"
@@ -78,7 +72,7 @@ export function PublicPrivateToggle({
             </svg>
             Private
           </div>
-          <p className="text-xs mt-0.5 opacity-70">Only in your journal</p>
+          <p className={styles.buttonHint}>Only in your journal</p>
         </button>
       </div>
     </div>

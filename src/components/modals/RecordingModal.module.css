@@ -1,0 +1,180 @@
+.wrapper {
+  padding: 1.5rem;
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.headerContent {
+  flex: 1;
+}
+
+.loadingContainer {
+  display: flex;
+  justify-content: center;
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+
+.content > * + * {
+  margin-top: 1rem;
+}
+
+.metaSection > * + * {
+  margin-top: 0.5rem;
+}
+
+.metaRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.timestamp {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  color: #5a5a7a;
+}
+
+.displayName {
+  color: #fff;
+  font-weight: 500;
+}
+
+.locationText {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  color: #5a5a7a;
+}
+
+/* Random Navigation */
+.randomNav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.navButton {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  transition: all 0.2s;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.navButtonEnabled {
+  color: #8a8aaa;
+  background-color: rgba(16, 16, 42, 0.6);
+  border: 1px solid #2a2a4a;
+}
+
+.navButtonEnabled:hover {
+  color: #fff;
+  background-color: rgba(26, 26, 58, 0.8);
+  border-color: #3a3a5a;
+}
+
+.navButtonDisabled {
+  color: #1a1a3a;
+  cursor: not-allowed;
+}
+
+.navButtonLabel {
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .navButtonLabel {
+    display: inline;
+  }
+}
+
+.randomLabel {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  color: #3a3a5a;
+}
+
+/* Actions */
+.actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.deleteButton {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  color: #3a3a5a;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.15s;
+}
+
+.deleteButton:hover {
+  color: #f87171;
+}
+
+.reportButton {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.15s;
+  color: #3a3a5a;
+}
+
+.reportButton:hover {
+  color: #f87171;
+}
+
+.reportButtonDisabled {
+  color: #2a2a4a;
+  cursor: not-allowed;
+}
+
+.reportButtonDisabled:hover {
+  color: #2a2a4a;
+}
+
+/* Divider */
+.divider {
+  border-top: 1px solid #1a1a3a;
+}
+
+/* Not found */
+.notFound {
+  color: #5a5a7a;
+  text-align: center;
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+
+/* Close button */
+.closeButton {
+  color: #5a5a7a;
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-left: 1rem;
+  flex-shrink: 0;
+  transition: color 0.15s;
+}
+
+.closeButton:hover {
+  color: #fff;
+}

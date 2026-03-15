@@ -1,5 +1,6 @@
 import { Comment } from "@/types/comment";
 import { relativeTime } from "@/lib/utils/time";
+import styles from "./CommentItem.module.css";
 
 interface CommentItemProps {
   comment: Comment;
@@ -7,16 +8,16 @@ interface CommentItemProps {
 
 export function CommentItem({ comment }: CommentItemProps) {
   return (
-    <div className="py-3 border-b border-selah-700/50 last:border-0 animate-fade-in">
-      <div className="flex items-baseline justify-between gap-2 mb-1">
-        <span className="text-xs font-medium text-selah-300">
+    <div className={styles.item}>
+      <div className={styles.header}>
+        <span className={styles.authorName}>
           {comment.anonymous_name}
         </span>
-        <span className="text-xs text-selah-500 flex-shrink-0">
+        <span className={styles.timestamp}>
           {relativeTime(comment.created_at)}
         </span>
       </div>
-      <p className="text-sm text-white/80 leading-relaxed break-words">
+      <p className={styles.content}>
         {comment.content}
       </p>
     </div>

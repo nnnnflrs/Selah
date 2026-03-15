@@ -1,0 +1,44 @@
+.page {
+  height: 100vh;
+  width: 100vw;
+  background-color: var(--selah-950);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.content {
+  text-align: center;
+}
+
+.content > * + * {
+  margin-top: 1rem;
+}
+
+.heading {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  color: #fff;
+}
+
+.message {
+  color: var(--selah-400);
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.retryButton {
+  padding: 0.5rem 1rem;
+  background-color: var(--selah-700);
+  color: #fff;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.retryButton:hover {
+  background-color: var(--selah-600);
+}

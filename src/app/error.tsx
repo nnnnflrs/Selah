@@ -1,5 +1,7 @@
 "use client";
 
+import styles from "./error.module.css";
+
 export default function Error({
   reset,
 }: {
@@ -7,15 +9,15 @@ export default function Error({
   reset: () => void;
 }) {
   return (
-    <div className="h-screen w-screen bg-selah-950 flex items-center justify-center">
-      <div className="text-center space-y-4">
-        <h2 className="text-xl text-white">Something went wrong</h2>
-        <p className="text-selah-400 text-sm">
+    <div className={styles.page}>
+      <div className={styles.content}>
+        <h2 className={styles.heading}>Something went wrong</h2>
+        <p className={styles.message}>
           An unexpected error occurred. Please try again.
         </p>
         <button
           onClick={reset}
-          className="px-4 py-2 bg-selah-700 hover:bg-selah-600 text-white rounded-lg text-sm transition-colors"
+          className={styles.retryButton}
         >
           Try again
         </button>

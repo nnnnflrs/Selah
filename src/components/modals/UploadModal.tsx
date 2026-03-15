@@ -19,6 +19,7 @@ import { sileo } from "sileo";
 import { formatDuration } from "@/lib/utils/time";
 import { MAX_DURATION } from "@/lib/constants";
 import { Emotion } from "@/types/emotion";
+import styles from "./UploadModal.module.css";
 
 export function UploadModal() {
   const { isUploadModalOpen, closeUploadModal } = useMapStore();
@@ -145,8 +146,8 @@ export function UploadModal() {
   if (isUploadModalOpen && !isAuthenticated) {
     return (
       <Modal isOpen={isUploadModalOpen} onClose={handleClose}>
-        <div className="p-6 text-center space-y-4">
-          <div className="w-12 h-12 mx-auto rounded-full bg-gradient-to-br from-glow-grateful to-glow-hopeful flex items-center justify-center">
+        <div className={styles.signInContainer}>
+          <div className={styles.signInIcon}>
             <svg
               width="24"
               height="24"
@@ -163,10 +164,10 @@ export function UploadModal() {
               <line x1="8" y1="23" x2="16" y2="23" />
             </svg>
           </div>
-          <h2 className="text-lg font-medium text-white">
+          <h2 className={styles.signInTitle}>
             Sign in to record
           </h2>
-          <p className="text-sm text-selah-400">
+          <p className={styles.signInDescription}>
             Sign in with Google to share your voice with the world. Your
             recordings remain completely anonymous.
           </p>
@@ -178,16 +179,16 @@ export function UploadModal() {
 
   return (
     <Modal isOpen={isUploadModalOpen} onClose={handleClose}>
-      <form onSubmit={handleSubmit} className="p-6 space-y-5">
+      <form onSubmit={handleSubmit} className={styles.form}>
         {/* Header */}
-        <div className="flex items-center justify-between">
-          <h2 className="text-lg font-medium text-white">
+        <div className={styles.formHeader}>
+          <h2 className={styles.formTitle}>
             Share a Recording
           </h2>
           <button
             type="button"
             onClick={handleClose}
-            className="text-selah-400 hover:text-white transition-colors"
+            className={styles.closeButton}
           >
             <svg
               width="20"
@@ -204,11 +205,11 @@ export function UploadModal() {
         </div>
 
         {/* Audio Section */}
-        <div className="space-y-3">
-          <label className="block text-sm text-selah-300">Audio</label>
+        <div className={styles.audioSection}>
+          <label className={styles.audioLabel}>Audio</label>
 
           {hasRecording ? (
-            <div className="space-y-2">
+            <div className={styles.recordingPreview}>
               <AudioPlayer src={audioBlobUrl} fallbackDuration={duration} />
               <button
                 type="button"
@@ -217,19 +218,19 @@ export function UploadModal() {
                   resetRecorder();
                   setAudioBlobUrl("");
                 }}
-                className="text-xs text-selah-400 hover:text-white transition-colors"
+                className={styles.reRecordButton}
               >
                 Re-record
               </button>
             </div>
           ) : (
-            <div className="space-y-3">
+            <div className={styles.recordSection}>
               {/* Timer */}
-              <div className="text-center">
-                <div className="text-3xl font-mono text-white tabular-nums">
+              <div className={styles.timerContainer}>
+                <div className={styles.timer}>
                   {formatDuration(duration)}
                 </div>
-                <div className="text-xs text-selah-500 mt-0.5">
+                <div className={styles.timerMax}>
                   {formatDuration(MAX_DURATION)} max
                 </div>
               </div>
@@ -243,13 +244,13 @@ export function UploadModal() {
               />
 
               {phase === "error" && (
-                <p className="text-red-400 text-sm text-center">
+                <p className={styles.micError}>
                   Could not access microphone. Please allow microphone access.
                 </p>
               )}
 
               {/* Record controls */}
-              <div className="flex justify-center gap-3">
+              <div className={styles.recordControls}>
                 {phase === "idle" || phase === "error" ? (
                   <Button type="button" onClick={start}>
                     <svg
@@ -291,8 +292,8 @@ export function UploadModal() {
         <PublicPrivateToggle isPublic={isPublic} onChange={setIsPublic} />
 
         {/* Location */}
-        <div className="space-y-2">
-          <label className="block text-sm text-selah-300">Location</label>
+        <div className={styles.locationSection}>
+          <label className={styles.locationLabel}>Location</label>
           <LocationAutocomplete
             value={locationText}
             onChange={setLocationText}
@@ -302,7 +303,7 @@ export function UploadModal() {
             }}
           />
           {latitude !== null && longitude !== null ? (
-            <div className="text-xs text-glow-grateful">
+            <div className={styles.locationSet}>
               Location set ({latitude.toFixed(4)}, {longitude.toFixed(4)})
             </div>
           ) : (
@@ -330,12 +331,12 @@ export function UploadModal() {
             </Button>
           )}
           {geoError && (
-            <p className="text-xs text-red-400">{geoError}</p>
+            <p className={styles.geoError}>{geoError}</p>
           )}
         </div>
 
         {/* Submit */}
-        <div className="pt-2">
+        <div className={styles.submitContainer}>
           <Button
             type="submit"
             isLoading={isSubmitting}
@@ -345,7 +346,7 @@ export function UploadModal() {
               latitude === null ||
               longitude === null
             }
-            className="w-full"
+            className={styles.submitButton}
           >
             {isPublic ? "Share Recording" : "Save to Journal"}
           </Button>

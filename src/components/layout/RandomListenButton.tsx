@@ -5,6 +5,7 @@ import { MapRef } from "react-map-gl/mapbox";
 import { useRecordings } from "@/hooks/useRecordings";
 import { useMapStore } from "@/stores/mapStore";
 import { sileo } from "sileo";
+import styles from "./RandomListenButton.module.css";
 
 interface RandomListenButtonProps {
   mapRef: RefObject<MapRef | null>;
@@ -36,19 +37,10 @@ export function RandomListenButton({ mapRef }: RandomListenButtonProps) {
   const hidden = isRecordingModalOpen || isUploadModalOpen;
 
   return (
-    <div className={`absolute bottom-32 left-4 mb-[env(safe-area-inset-bottom)] sm:bottom-8 sm:left-8 z-[1000] ${hidden ? "hidden" : ""}`}>
+    <div className={`${styles.wrapper} ${hidden ? styles.hidden : ''}`}>
       <button
         onClick={handleClick}
-        className="
-          flex items-center justify-center gap-1.5
-          px-3 py-2 sm:px-4 sm:py-2.5 rounded-full
-          bg-selah-800/80 border border-selah-600
-          text-selah-300 hover:text-white
-          hover:bg-selah-700/80 hover:border-selah-500
-          shadow-lg shadow-black/20
-          transition-all duration-200
-          hover:scale-105 active:scale-95
-        "
+        className={styles.button}
         aria-label="Listen to a random recording"
       >
         <svg
@@ -60,7 +52,7 @@ export function RandomListenButton({ mapRef }: RandomListenButtonProps) {
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
-          className="shrink-0"
+          className={styles.icon}
         >
           <polyline points="16 3 21 3 21 8" />
           <line x1="4" y1="20" x2="21" y2="3" />
@@ -68,8 +60,8 @@ export function RandomListenButton({ mapRef }: RandomListenButtonProps) {
           <line x1="15" y1="15" x2="21" y2="21" />
           <line x1="4" y1="4" x2="9" y2="9" />
         </svg>
-        <span className="text-sm font-medium hidden sm:inline">Listen to random story</span>
-        <span className="text-sm font-medium sm:hidden">Random</span>
+        <span className={styles.labelFull}>Listen to random story</span>
+        <span className={styles.labelShort}>Random</span>
       </button>
     </div>
   );

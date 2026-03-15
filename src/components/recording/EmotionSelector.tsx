@@ -2,6 +2,7 @@
 
 import { EMOTIONS, EMOTION_LIST } from "@/lib/constants";
 import { Emotion } from "@/types/emotion";
+import styles from "./EmotionSelector.module.css";
 
 interface EmotionSelectorProps {
   value: Emotion | null;
@@ -10,11 +11,11 @@ interface EmotionSelectorProps {
 
 export function EmotionSelector({ value, onChange }: EmotionSelectorProps) {
   return (
-    <div className="space-y-2">
-      <label className="block text-sm text-selah-300">
+    <div className={styles.container}>
+      <label className={styles.label}>
         How are you feeling?
       </label>
-      <div className="grid grid-cols-4 gap-2">
+      <div className={styles.grid}>
         {EMOTION_LIST.map((emotion) => {
           const config = EMOTIONS[emotion];
           const isSelected = value === emotion;
@@ -24,15 +25,7 @@ export function EmotionSelector({ value, onChange }: EmotionSelectorProps) {
               key={emotion}
               type="button"
               onClick={() => onChange(emotion)}
-              className={`
-                flex flex-col items-center gap-1.5 p-3 rounded-xl
-                border transition-all duration-150 text-xs
-                ${
-                  isSelected
-                    ? "border-opacity-60 scale-105"
-                    : "border-selah-600 hover:border-selah-500 bg-selah-800/50"
-                }
-              `}
+              className={isSelected ? styles.buttonSelected : styles.button}
               style={
                 isSelected
                   ? {
@@ -44,11 +37,11 @@ export function EmotionSelector({ value, onChange }: EmotionSelectorProps) {
               }
             >
               <span
-                className="w-5 h-5 rounded-full"
+                className={styles.dot}
                 style={{ backgroundColor: config.color }}
               />
               <span
-                className={isSelected ? "text-white" : "text-selah-400"}
+                className={isSelected ? styles.labelTextSelected : styles.labelText}
               >
                 {config.label}
               </span>

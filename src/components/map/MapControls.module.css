@@ -1,0 +1,42 @@
+.container {
+  position: absolute;
+  bottom: 8rem;
+  right: 1rem;
+  padding-bottom: env(safe-area-inset-bottom);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+@media (min-width: 640px) {
+  .container {
+    bottom: 6rem;
+  }
+}
+
+.hidden {
+  display: none;
+}
+
+.recordButton {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 9999px;
+  background: linear-gradient(to bottom right, var(--glow-grateful), var(--glow-hopeful));
+  box-shadow: 0 10px 15px -3px rgba(0, 206, 209, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 200ms;
+  border: none;
+  cursor: pointer;
+}
+
+.recordButton:hover {
+  transform: scale(1.1);
+}
+
+.recordButton:active {
+  transform: scale(0.95);
+}

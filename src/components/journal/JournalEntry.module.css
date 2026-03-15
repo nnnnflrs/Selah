@@ -1,0 +1,77 @@
+.card {
+  background-color: rgba(16, 16, 42, 0.5);
+  border: 1px solid var(--selah-700);
+  border-radius: 0.75rem;
+  padding: 1rem;
+}
+
+.card > * + * {
+  margin-top: 0.75rem;
+}
+
+.headerRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.headerInfo {
+  min-width: 0;
+}
+
+.headerInfo > * + * {
+  margin-top: 0.25rem;
+}
+
+.metaRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.date {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: var(--selah-300);
+}
+
+.statusBadge {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  padding: 0.125rem 0.5rem;
+  border-radius: 9999px;
+}
+
+.statusPublic {
+  background-color: rgba(0, 206, 209, 0.1);
+  color: var(--glow-grateful);
+}
+
+.statusPrivate {
+  background-color: rgba(222, 184, 135, 0.1);
+  color: var(--glow-nostalgic);
+}
+
+.locationText {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  color: var(--selah-400);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.deleteButton {
+  color: var(--selah-500);
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.deleteButton:hover {
+  color: #f87171;
+}

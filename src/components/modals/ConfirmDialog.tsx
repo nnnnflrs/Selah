@@ -2,6 +2,7 @@
 
 import { Modal } from "@/components/ui/Modal";
 import { Button } from "@/components/ui/Button";
+import styles from "./ConfirmDialog.module.css";
 
 interface ConfirmDialogProps {
   isOpen: boolean;
@@ -23,11 +24,11 @@ export function ConfirmDialog({
   isLoading,
 }: ConfirmDialogProps) {
   return (
-    <Modal isOpen={isOpen} onClose={onClose} className="max-w-sm">
-      <div className="p-6 space-y-4">
-        <h3 className="text-lg font-medium text-white">{title}</h3>
-        <p className="text-sm text-selah-300">{message}</p>
-        <div className="flex justify-end gap-3">
+    <Modal isOpen={isOpen} onClose={onClose} className={styles.dialog}>
+      <div className={styles.container}>
+        <h3 className={styles.title}>{title}</h3>
+        <p className={styles.message}>{message}</p>
+        <div className={styles.actions}>
           <Button variant="ghost" onClick={onClose}>
             Cancel
           </Button>

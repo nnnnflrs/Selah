@@ -1,12 +1,39 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
+/* ===== CSS Variables (Theme) ===== */
 :root {
   --background: #050510;
   --foreground: #e0e0f0;
+
+  /* Selah color palette */
+  --selah-950: #050510;
+  --selah-900: #0a0a1a;
+  --selah-800: #10102a;
+  --selah-700: #1a1a3a;
+  --selah-600: #2a2a4a;
+  --selah-500: #3a3a5a;
+  --selah-400: #5a5a7a;
+  --selah-300: #8a8aaa;
+
+  /* Glow (emotion) colors */
+  --glow-happy: #FFD700;
+  --glow-sad: #4169E1;
+  --glow-anxious: #9932CC;
+  --glow-grateful: #00CED1;
+  --glow-frustrated: #DC143C;
+  --glow-sleepless: #6A5ACD;
+  --glow-hopeful: #98FB98;
+  --glow-nostalgic: #DEB887;
+
+  /* Shadows */
+  --shadow-glow: 0 0 15px 5px var(--glow-color, #00f0ff);
+  --shadow-glow-sm: 0 0 8px 2px var(--glow-color, #00f0ff);
+  --shadow-glow-lg: 0 0 25px 10px var(--glow-color, #00f0ff);
+
+  /* Font families */
+  --font-sans: var(--font-geist-sans), system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), monospace;
 }
 
+/* ===== Reset ===== */
 * {
   margin: 0;
   padding: 0;
@@ -19,15 +46,51 @@ body {
   overflow: hidden;
   background: var(--background);
   color: var(--foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Hide Mapbox logo and attribution for clean UI */
+/* ===== Animations ===== */
+@keyframes pulse-glow {
+  0%, 100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes slideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ===== Hide Mapbox logo and attribution ===== */
 .mapboxgl-ctrl-logo,
 .mapboxgl-ctrl-attrib {
   display: none !important;
 }
 
-/* Marker glow effect */
+/* ===== Marker glow effect ===== */
 .marker-glow {
   width: 24px;
   height: 24px;
@@ -54,37 +117,25 @@ body {
   opacity: 0.9;
 }
 
-@keyframes pulse-glow {
-  0%,
-  100% {
-    opacity: 0.6;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.15);
-  }
-}
-
-/* Scrollbar */
+/* ===== Scrollbar ===== */
 ::-webkit-scrollbar {
   width: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #10102a;
+  background: var(--selah-800);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #2a2a4a;
+  background: var(--selah-600);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #3a3a5a;
+  background: var(--selah-500);
 }
 
-/* Audio element styling */
+/* ===== Audio element styling ===== */
 audio::-webkit-media-controls-panel {
-  background: #10102a;
+  background: var(--selah-800);
 }

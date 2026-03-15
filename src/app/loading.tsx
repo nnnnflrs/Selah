@@ -1,9 +1,11 @@
+import styles from "./loading.module.css";
+
 export default function Loading() {
   return (
-    <div className="h-screen w-screen bg-selah-950 flex items-center justify-center">
-      <div className="flex flex-col items-center gap-4">
+    <div className={styles.page}>
+      <div className={styles.content}>
         <div
-          className="w-4 h-4 rounded-full animate-pulse-glow"
+          className={styles.dot}
           style={
             {
               "--glow-color": "#00f0ff",
@@ -12,7 +14,7 @@ export default function Loading() {
             } as React.CSSProperties
           }
         />
-        <span className="text-selah-400 text-sm">Loading...</span>
+        <span className={styles.loadingText}>Loading...</span>
       </div>
     </div>
   );

@@ -8,6 +8,7 @@ import { sileo } from "sileo";
 import { generateAnonymousName } from "@/lib/utils/names";
 import { MAX_COMMENT_LENGTH } from "@/lib/constants";
 import { Comment } from "@/types/comment";
+import styles from "./CommentForm.module.css";
 
 interface CommentFormProps {
   recordingId: string;
@@ -21,10 +22,10 @@ export function CommentForm({ recordingId, onCommentAdded }: CommentFormProps) {
 
   if (!isAuthenticated) {
     return (
-      <div className="text-center py-3">
+      <div className={styles.signInWrapper}>
         <button
           onClick={signIn}
-          className="text-sm text-glow-grateful hover:text-glow-grateful/80 transition-colors"
+          className={styles.signInButton}
         >
           Sign in to leave a comment
         </button>
@@ -74,20 +75,20 @@ export function CommentForm({ recordingId, onCommentAdded }: CommentFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex gap-2">
+    <form onSubmit={handleSubmit} className={styles.form}>
       <Textarea
         value={content}
         onChange={(e) => setContent(e.target.value)}
         placeholder="Leave a thought..."
         maxLength={MAX_COMMENT_LENGTH}
         rows={2}
-        className="flex-1"
+        className={styles.textareaWrapper}
       />
       <Button
         type="submit"
         disabled={!content.trim()}
         isLoading={isSubmitting}
-        className="self-end"
+        className={styles.submitButton}
       >
         <svg
           width="16"

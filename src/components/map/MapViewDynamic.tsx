@@ -1,12 +1,13 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import styles from "./MapViewDynamic.module.css";
 
 const MapViewDynamic = dynamic(() => import("./MapView"), {
   ssr: false,
   loading: () => (
-    <div className="h-full w-full bg-selah-950 flex items-center justify-center">
-      <div className="text-selah-500 text-sm animate-pulse">
+    <div className={styles.loadingContainer}>
+      <div className={styles.loadingText}>
         Loading globe...
       </div>
     </div>

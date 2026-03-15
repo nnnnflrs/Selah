@@ -1,0 +1,21 @@
+.spinner {
+  animation: spin 1s linear infinite;
+  color: var(--selah-400);
+}
+
+.circle {
+  opacity: 0.25;
+}
+
+.path {
+  opacity: 0.75;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

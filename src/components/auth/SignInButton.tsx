@@ -1,6 +1,7 @@
 "use client";
 
 import { useAuthStore } from "@/stores/authStore";
+import styles from "./SignInButton.module.css";
 
 export function SignInButton() {
   const signIn = useAuthStore((s) => s.signIn);
@@ -8,13 +9,7 @@ export function SignInButton() {
   return (
     <button
       onClick={signIn}
-      className="
-        flex items-center gap-2 px-3 py-1.5
-        text-sm text-white/80 hover:text-white
-        bg-white/5 hover:bg-white/10
-        border border-white/10 hover:border-white/20
-        rounded-full transition-all duration-200
-      "
+      className={styles.button}
     >
       <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
         <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>

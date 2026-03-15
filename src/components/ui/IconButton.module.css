@@ -1,0 +1,17 @@
+.iconButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 9999px;
+  background: rgba(16, 16, 42, 0.8);
+  border: 1px solid var(--selah-600);
+  color: var(--selah-300);
+  transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.iconButton:hover {
+  background: var(--selah-700);
+  color: #ffffff;
+}

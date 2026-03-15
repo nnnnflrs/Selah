@@ -2,6 +2,7 @@
 
 import { RefObject, useCallback } from "react";
 import { MapRef } from "react-map-gl/mapbox";
+import styles from "./MyRecordingsBanner.module.css";
 import { useMapStore } from "@/stores/mapStore";
 import { DEFAULT_MAP_CENTER, DEFAULT_MAP_ZOOM } from "@/lib/constants";
 
@@ -39,12 +40,12 @@ export function MyRecordingsBanner({ mapRef }: MyRecordingsBannerProps) {
   if (!showMyRecordings) return null;
 
   return (
-    <div className="absolute top-20 left-1/2 -translate-x-1/2 z-20 animate-fade-in">
-      <div className="flex items-center gap-2 px-4 py-2 bg-selah-900/90 border border-selah-600 rounded-full backdrop-blur-sm shadow-lg">
-        <span className="text-sm text-selah-200">Viewing my recordings</span>
+    <div className={styles.wrapper}>
+      <div className={styles.banner}>
+        <span className={styles.label}>Viewing my recordings</span>
         <button
           onClick={handleReset}
-          className="text-xs text-selah-400 hover:text-white transition-colors flex items-center gap-1"
+          className={styles.resetButton}
         >
           <svg
             width="14"

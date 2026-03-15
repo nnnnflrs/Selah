@@ -8,6 +8,7 @@ import { PublicPrivateToggle } from "./PublicPrivateToggle";
 import { useJournalStore } from "@/stores/journalStore";
 import { sileo } from "sileo";
 import { Recording } from "@/types/recording";
+import styles from "./JournalEntry.module.css";
 
 interface JournalEntryProps {
   recording: Recording;
@@ -57,31 +58,31 @@ export function JournalEntry({ recording }: JournalEntryProps) {
 
   return (
     <>
-      <div className="bg-selah-800/50 border border-selah-700 rounded-xl p-4 space-y-3">
+      <div className={styles.card}>
         {/* Header row */}
-        <div className="flex items-start justify-between gap-3">
-          <div className="space-y-1 min-w-0">
-            <div className="flex items-center gap-2 flex-wrap">
-              <span className="text-sm text-selah-300">{formattedDate}</span>
+        <div className={styles.headerRow}>
+          <div className={styles.headerInfo}>
+            <div className={styles.metaRow}>
+              <span className={styles.date}>{formattedDate}</span>
               <Badge emotion={recording.emotion} />
               <span
-                className={`text-xs px-2 py-0.5 rounded-full ${
+                className={`${styles.statusBadge} ${
                   recording.is_public
-                    ? "bg-glow-grateful/10 text-glow-grateful"
-                    : "bg-glow-nostalgic/10 text-glow-nostalgic"
+                    ? styles.statusPublic
+                    : styles.statusPrivate
                 }`}
               >
                 {recording.is_public ? "Public" : "Private"}
               </span>
             </div>
-            <p className="text-xs text-selah-400 truncate">
+            <p className={styles.locationText}>
               {recording.anonymous_id || recording.anonymous_name}
               {recording.location_text && ` — ${recording.location_text}`}
             </p>
           </div>
           <button
             onClick={() => setShowDelete(true)}
-            className="text-selah-500 hover:text-red-400 transition-colors flex-shrink-0"
+            className={styles.deleteButton}
             aria-label="Delete recording"
           >
             <svg

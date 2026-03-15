@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useMapStore } from "@/stores/mapStore";
 import { JournalList } from "@/components/journal/JournalList";
+import styles from "./page.module.css";
 
 export default function JournalPage() {
   const router = useRouter();
@@ -15,14 +16,14 @@ export default function JournalPage() {
   };
 
   return (
-    <div className="min-h-screen bg-selah-950">
+    <div className={styles.page}>
       {/* Header */}
-      <header className="border-b border-selah-800">
-        <div className="max-w-2xl mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
+      <header className={styles.header}>
+        <div className={styles.headerInner}>
+          <div className={styles.headerLeft}>
             <Link
               href="/"
-              className="text-selah-400 hover:text-white transition-colors"
+              className={styles.backLink}
               aria-label="Back to globe"
             >
               <svg
@@ -39,11 +40,11 @@ export default function JournalPage() {
                 <polyline points="12 19 5 12 12 5" />
               </svg>
             </Link>
-            <h1 className="text-lg font-medium text-white">My Journal</h1>
+            <h1 className={styles.title}>My Journal</h1>
           </div>
           <button
             onClick={handleViewOnGlobe}
-            className="text-sm px-3 py-1.5 bg-selah-700 hover:bg-selah-600 text-white rounded-full transition-colors flex items-center gap-1.5"
+            className={styles.globeButton}
           >
             <svg
               width="14"
@@ -65,7 +66,7 @@ export default function JournalPage() {
       </header>
 
       {/* Content */}
-      <main className="max-w-2xl mx-auto px-4 py-6">
+      <main className={styles.content}>
         <JournalList />
       </main>
     </div>

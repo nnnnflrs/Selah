@@ -6,6 +6,7 @@ import { SignInButton } from "@/components/auth/SignInButton";
 import { UserMenu } from "@/components/auth/UserMenu";
 import { Modal } from "@/components/ui/Modal";
 import { useAuthStore } from "@/stores/authStore";
+import styles from "./Header.module.css";
 
 function AboutModal({
   isOpen,
@@ -16,38 +17,38 @@ function AboutModal({
 }) {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <div className="p-6 space-y-5">
-        <div className="flex items-center gap-2">
-          <h2 className="text-xl font-bold text-white tracking-tight">
-            Selah<span className="text-glow-grateful">.</span>
+      <div className={styles.modalBody}>
+        <div className={styles.modalTitleRow}>
+          <h2 className={styles.modalTitle}>
+            Selah<span className={styles.modalTitleDot}>.</span>
           </h2>
         </div>
 
-        <p className="text-selah-300 text-sm leading-relaxed">
+        <p className={styles.modalDescription}>
           Selah is an anonymous voice journal where your recordings are pinned
           to locations on a 3D globe. Share how you feel, listen to others
           around the world, and leave a trace without revealing who you are.
         </p>
 
-        <div className="space-y-3">
-          <div className="flex items-start gap-3">
-            <div className="w-8 h-8 rounded-lg bg-glow-grateful/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+        <div className={styles.featureList}>
+          <div className={styles.featureRow}>
+            <div className={`${styles.featureIcon} ${styles.featureIconGrateful}`}>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00CED1" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
                 <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
               </svg>
             </div>
             <div>
-              <h3 className="text-white text-sm font-medium">Record</h3>
-              <p className="text-selah-400 text-xs">
+              <h3 className={styles.featureTitle}>Record</h3>
+              <p className={styles.featureDesc}>
                 Capture a voice note and tag it with an emotion. One recording
                 per day.
               </p>
             </div>
           </div>
 
-          <div className="flex items-start gap-3">
-            <div className="w-8 h-8 rounded-lg bg-glow-hopeful/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+          <div className={styles.featureRow}>
+            <div className={`${styles.featureIcon} ${styles.featureIconHopeful}`}>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#98FB98" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="12" cy="12" r="10" />
                 <line x1="2" y1="12" x2="22" y2="12" />
@@ -55,23 +56,23 @@ function AboutModal({
               </svg>
             </div>
             <div>
-              <h3 className="text-white text-sm font-medium">Pin</h3>
-              <p className="text-selah-400 text-xs">
+              <h3 className={styles.featureTitle}>Pin</h3>
+              <p className={styles.featureDesc}>
                 Your recording is placed on the globe at your chosen location
                 for the world to discover.
               </p>
             </div>
           </div>
 
-          <div className="flex items-start gap-3">
-            <div className="w-8 h-8 rounded-lg bg-glow-nostalgic/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+          <div className={styles.featureRow}>
+            <div className={`${styles.featureIcon} ${styles.featureIconNostalgic}`}>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#DEB887" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z" />
               </svg>
             </div>
             <div>
-              <h3 className="text-white text-sm font-medium">Listen</h3>
-              <p className="text-selah-400 text-xs">
+              <h3 className={styles.featureTitle}>Listen</h3>
+              <p className={styles.featureDesc}>
                 Explore anonymous stories from around the world. Leave comments
                 and connect through sound.
               </p>
@@ -79,15 +80,15 @@ function AboutModal({
           </div>
         </div>
 
-        <div className="border-t border-selah-700 pt-4 flex items-center justify-between">
-          <p className="text-selah-500 text-xs">
+        <div className={styles.modalFooter}>
+          <p className={styles.footerTagline}>
             Pause. Breathe. Speak.
           </p>
           <a
             href="https://github.com/nnnnflrs/Selah"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-selah-400 hover:text-white transition-colors"
+            className={styles.githubLink}
             aria-label="GitHub"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
@@ -106,15 +107,15 @@ export function Header() {
 
   return (
     <>
-      <header className="absolute top-0 left-0 right-0 z-[1000] pointer-events-none">
-        <div className="flex items-center justify-between p-4 pointer-events-auto max-w-screen-2xl mx-auto">
-          <div className="flex items-center gap-1.5">
-            <h1 className="text-xl font-bold text-white tracking-tight">
-              Selah<span className="text-glow-grateful animate-pulse-glow inline-block origin-center">.</span>
+      <header className={styles.header}>
+        <div className={styles.headerInner}>
+          <div className={styles.logoGroup}>
+            <h1 className={styles.logoText}>
+              Selah<span className={styles.logoDot}>.</span>
             </h1>
             <button
               onClick={() => setShowAbout(true)}
-              className="text-white/30 hover:text-white/70 transition-colors ml-1"
+              className={styles.infoButton}
               aria-label="About Selah"
             >
               <svg
@@ -133,7 +134,7 @@ export function Header() {
               </svg>
             </button>
           </div>
-          <div className="flex items-center gap-2 sm:gap-3">
+          <div className={styles.rightGroup}>
             {!isLoading && (
               isAuthenticated ? <UserMenu /> : <SignInButton />
             )}

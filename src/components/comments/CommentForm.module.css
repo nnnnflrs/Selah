@@ -1,0 +1,32 @@
+.signInWrapper {
+  text-align: center;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+}
+
+.signInButton {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: var(--glow-grateful);
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.signInButton:hover {
+  color: rgba(0, 206, 209, 0.8);
+}
+
+.form {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.textareaWrapper {
+  flex: 1 1 0%;
+}
+
+.submitButton {
+  align-self: flex-end;
+}

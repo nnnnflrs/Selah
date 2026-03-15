@@ -3,6 +3,7 @@
 import { useRef, useState, useCallback, useEffect } from "react";
 import Map, { Marker, MapRef } from "react-map-gl/mapbox";
 import "mapbox-gl/dist/mapbox-gl.css";
+import styles from "./MapView.module.css";
 import { useMapStore } from "@/stores/mapStore";
 import { useRecordings } from "@/hooks/useRecordings";
 import { useJournalStore } from "@/stores/journalStore";
@@ -226,7 +227,7 @@ export default function MapView() {
   }, [fitToMyRecordings]);
 
   return (
-    <div className="h-full w-full relative">
+    <div className={styles.container}>
       <Map
         ref={mapRef}
         id="selah-map"
@@ -260,7 +261,7 @@ export default function MapView() {
               }}
             >
               <div
-                className="marker-glow cursor-pointer"
+                className={`marker-glow ${styles.markerButton}`}
                 style={{ "--glow-color": color } as React.CSSProperties}
               >
                 <div

@@ -1,0 +1,67 @@
+.container > * + * {
+  margin-top: 0.375rem;
+}
+
+.label {
+  display: block;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: var(--selah-300);
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.toggleButton {
+  flex: 1 1 0%;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.toggleButtonActive.public {
+  background-color: rgba(0, 206, 209, 0.2);
+  color: var(--glow-grateful);
+  border: 1px solid rgba(0, 206, 209, 0.3);
+}
+
+.toggleButtonActive.private {
+  background-color: rgba(222, 184, 135, 0.2);
+  color: var(--glow-nostalgic);
+  border: 1px solid rgba(222, 184, 135, 0.3);
+}
+
+.toggleButtonInactive {
+  background-color: var(--selah-800);
+  color: var(--selah-400);
+  border: 1px solid var(--selah-700);
+}
+
+.toggleButtonInactive:hover {
+  border-color: var(--selah-600);
+}
+
+.toggleButtonDisabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.buttonContent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+}
+
+.buttonHint {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  margin-top: 0.125rem;
+  opacity: 0.7;
+}

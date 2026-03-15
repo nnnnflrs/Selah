@@ -1,0 +1,46 @@
+.loadingWrapper {
+  display: flex;
+  justify-content: center;
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+}
+
+.emptyState {
+  text-align: center;
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+}
+
+.emptyState > * + * {
+  margin-top: 0.75rem;
+}
+
+.emptyIcon {
+  width: 4rem;
+  height: 4rem;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 9999px;
+  background-color: var(--selah-800);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.emptyIconSvg {
+  color: var(--selah-500);
+}
+
+.emptyTitle {
+  color: var(--selah-400);
+}
+
+.emptySubtitle {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: var(--selah-500);
+}
+
+.list > * + * {
+  margin-top: 1rem;
+}

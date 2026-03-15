@@ -1,5 +1,6 @@
 import { EMOTIONS } from "@/lib/constants";
 import { Emotion } from "@/types/emotion";
+import styles from "./Badge.module.css";
 
 interface BadgeProps {
   emotion: Emotion;
@@ -10,7 +11,7 @@ export function Badge({ emotion }: BadgeProps) {
 
   return (
     <span
-      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium"
+      className={styles.badge}
       style={{
         backgroundColor: `${config.color}15`,
         color: config.color,
@@ -18,7 +19,7 @@ export function Badge({ emotion }: BadgeProps) {
       }}
     >
       <span
-        className="w-2 h-2 rounded-full"
+        className={styles.dot}
         style={{ backgroundColor: config.color }}
       />
       {config.label}

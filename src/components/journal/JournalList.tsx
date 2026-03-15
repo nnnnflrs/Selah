@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useJournalStore } from "@/stores/journalStore";
 import { JournalEntry } from "./JournalEntry";
 import { Spinner } from "@/components/ui/Spinner";
+import styles from "./JournalList.module.css";
 
 export function JournalList() {
   const { recordings, isLoading, hasFetched, fetchJournal } =
@@ -17,7 +18,7 @@ export function JournalList() {
 
   if (isLoading && !hasFetched) {
     return (
-      <div className="flex justify-center py-16">
+      <div className={styles.loadingWrapper}>
         <Spinner />
       </div>
     );
@@ -25,8 +26,8 @@ export function JournalList() {
 
   if (hasFetched && recordings.length === 0) {
     return (
-      <div className="text-center py-16 space-y-3">
-        <div className="w-16 h-16 mx-auto rounded-full bg-selah-800 flex items-center justify-center">
+      <div className={styles.emptyState}>
+        <div className={styles.emptyIcon}>
           <svg
             width="28"
             height="28"
@@ -34,7 +35,7 @@ export function JournalList() {
             fill="none"
             stroke="currentColor"
             strokeWidth="1.5"
-            className="text-selah-500"
+            className={styles.emptyIconSvg}
             strokeLinecap="round"
             strokeLinejoin="round"
           >
@@ -44,8 +45,8 @@ export function JournalList() {
             <line x1="8" y1="23" x2="16" y2="23" />
           </svg>
         </div>
-        <p className="text-selah-400">No recordings yet.</p>
-        <p className="text-sm text-selah-500">
+        <p className={styles.emptyTitle}>No recordings yet.</p>
+        <p className={styles.emptySubtitle}>
           Head to the globe to share your first voice.
         </p>
       </div>
@@ -53,7 +54,7 @@ export function JournalList() {
   }
 
   return (
-    <div className="space-y-4">
+    <div className={styles.list}>
       {recordings.map((recording) => (
         <JournalEntry key={recording.id} recording={recording} />
       ))}

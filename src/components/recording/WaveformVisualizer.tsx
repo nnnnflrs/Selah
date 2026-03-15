@@ -1,6 +1,7 @@
 "use client";
 
 import { useWaveform } from "@/hooks/useWaveform";
+import styles from "./WaveformVisualizer.module.css";
 
 interface WaveformVisualizerProps {
   analyserNode: AnalyserNode | null;
@@ -18,12 +19,12 @@ export function WaveformVisualizer({
   const canvasRef = useWaveform({ analyserNode, isActive, color });
 
   return (
-    <div className="w-full rounded-lg bg-selah-900/50 overflow-hidden">
+    <div className={styles.container}>
       <canvas
         ref={canvasRef}
         width={400}
         height={height}
-        className="w-full"
+        className={styles.canvas}
         style={{ height }}
       />
     </div>

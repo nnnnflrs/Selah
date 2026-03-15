@@ -3,6 +3,7 @@
 import { useCallback, RefObject } from "react";
 import { MapRef } from "react-map-gl/mapbox";
 import { IconButton } from "@/components/ui/IconButton";
+import styles from "./MapControls.module.css";
 import { useMapStore } from "@/stores/mapStore";
 import { useAuthStore } from "@/stores/authStore";
 import { sileo } from "sileo";
@@ -88,17 +89,10 @@ export function MapControls({ mapRef }: MapControlsProps) {
   const hidden = isRecordingModalOpen || isUploadModalOpen;
 
   return (
-    <div className={`absolute bottom-32 right-4 pb-[env(safe-area-inset-bottom)] sm:bottom-24 z-[1000] flex flex-col gap-2 ${hidden ? "hidden" : ""}`}>
+    <div className={`${styles.container} ${hidden ? styles.hidden : ''}`}>
       <button
         onClick={handleRecord}
-        className="
-          w-10 h-10 rounded-full
-          bg-gradient-to-br from-glow-grateful to-glow-hopeful
-          shadow-lg shadow-glow-grateful/20
-          flex items-center justify-center
-          hover:scale-110 active:scale-95
-          transition-transform duration-200
-        "
+        className={styles.recordButton}
         aria-label="Record audio"
       >
         <svg

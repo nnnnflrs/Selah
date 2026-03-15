@@ -13,6 +13,7 @@ import { useRecordings } from "@/hooks/useRecordings";
 import { sileo } from "sileo";
 import { Recording } from "@/types/recording";
 import { relativeTime } from "@/lib/utils/time";
+import styles from "./RecordingModal.module.css";
 
 export function RecordingModal() {
   const { selectedRecordingId, isRecordingModalOpen, clearSelection } =
@@ -143,28 +144,28 @@ export function RecordingModal() {
   return (
     <>
       <Modal isOpen={isRecordingModalOpen} onClose={clearSelection}>
-        <div className="p-6">
-          <div className="flex items-start justify-between mb-4">
-            <div className="flex-1">
+        <div className={styles.wrapper}>
+          <div className={styles.header}>
+            <div className={styles.headerContent}>
               {isLoading ? (
-                <div className="flex justify-center py-12">
+                <div className={styles.loadingContainer}>
                   <Spinner />
                 </div>
               ) : recording ? (
-                <div className="space-y-4">
+                <div className={styles.content}>
                   {/* Header */}
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-2 flex-wrap">
+                  <div className={styles.metaSection}>
+                    <div className={styles.metaRow}>
                       <Badge emotion={recording.emotion} />
-                      <span className="text-xs text-selah-400">
+                      <span className={styles.timestamp}>
                         {relativeTime(recording.created_at)}
                       </span>
                     </div>
-                    <h3 className="text-white font-medium">
+                    <h3 className={styles.displayName}>
                       {displayName}
                     </h3>
                     {recording.location_text && (
-                      <p className="text-xs text-selah-400">
+                      <p className={styles.locationText}>
                         {recording.location_text}
                       </p>
                     )}
@@ -175,40 +176,27 @@ export function RecordingModal() {
 
                   {/* Random Navigation */}
                   {isRandomMode && (
-                    <div className="flex items-center justify-center gap-3">
+                    <div className={styles.randomNav}>
                       <button
                         onClick={handlePrev}
                         disabled={!canGoPrev}
-                        className={`
-                          flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm
-                          transition-all duration-200
-                          ${canGoPrev
-                            ? "text-selah-300 hover:text-white bg-selah-800/60 hover:bg-selah-700/80 border border-selah-600 hover:border-selah-500"
-                            : "text-selah-700 cursor-not-allowed"
-                          }
-                        `}
+                        className={`${styles.navButton} ${canGoPrev ? styles.navButtonEnabled : styles.navButtonDisabled}`}
                         aria-label="Previous recording"
                       >
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                           <polyline points="15 18 9 12 15 6" />
                         </svg>
-                        <span className="hidden sm:inline">Prev</span>
+                        <span className={styles.navButtonLabel}>Prev</span>
                       </button>
 
-                      <span className="text-xs text-selah-500">Random</span>
+                      <span className={styles.randomLabel}>Random</span>
 
                       <button
                         onClick={handleNext}
-                        className="
-                          flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm
-                          text-selah-300 hover:text-white
-                          bg-selah-800/60 hover:bg-selah-700/80
-                          border border-selah-600 hover:border-selah-500
-                          transition-all duration-200
-                        "
+                        className={`${styles.navButton} ${styles.navButtonEnabled}`}
                         aria-label="Next recording"
                       >
-                        <span className="hidden sm:inline">Next</span>
+                        <span className={styles.navButtonLabel}>Next</span>
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                           <polyline points="9 18 15 12 9 6" />
                         </svg>
@@ -217,11 +205,11 @@ export function RecordingModal() {
                   )}
 
                   {/* Actions */}
-                  <div className="flex justify-between items-center">
+                  <div className={styles.actions}>
                     {isOwner ? (
                       <button
                         onClick={() => setShowDelete(true)}
-                        className="text-xs text-selah-500 hover:text-red-400 transition-colors"
+                        className={styles.deleteButton}
                       >
                         Delete
                       </button>
@@ -232,11 +220,7 @@ export function RecordingModal() {
                       <button
                         onClick={() => setShowReport(true)}
                         disabled={hasReported}
-                        className={`text-xs transition-colors ${
-                          hasReported
-                            ? "text-selah-600 cursor-not-allowed"
-                            : "text-selah-500 hover:text-red-400"
-                        }`}
+                        className={`${styles.reportButton} ${hasReported ? styles.reportButtonDisabled : ''}`}
                       >
                         {hasReported ? "Reported" : "Report"}
                       </button>
@@ -244,13 +228,13 @@ export function RecordingModal() {
                   </div>
 
                   {/* Divider */}
-                  <div className="border-t border-selah-700" />
+                  <div className={styles.divider} />
 
                   {/* Comments */}
                   <CommentsList recordingId={recording.id} />
                 </div>
               ) : (
-                <p className="text-selah-400 text-center py-12">
+                <p className={styles.notFound}>
                   Recording not found
                 </p>
               )}
@@ -258,7 +242,7 @@ export function RecordingModal() {
 
             <button
               onClick={clearSelection}
-              className="text-selah-400 hover:text-white transition-colors ml-4 flex-shrink-0"
+              className={styles.closeButton}
             >
               <svg
                 width="20"

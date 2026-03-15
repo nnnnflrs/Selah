@@ -1,0 +1,57 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.label {
+  display: block;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: #8a8aaa;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+}
+
+.button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.75rem;
+  border-radius: 0.75rem;
+  border: 1px solid #2a2a4a;
+  transition: all 0.15s ease;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  background-color: rgba(16, 16, 42, 0.5);
+  cursor: pointer;
+}
+
+.button:hover {
+  border-color: #3a3a5a;
+}
+
+.buttonSelected {
+  composes: button;
+  border-opacity: 0.6;
+  transform: scale(1.05);
+}
+
+.dot {
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 9999px;
+}
+
+.labelText {
+  color: #5a5a7a;
+}
+
+.labelTextSelected {
+  color: #ffffff;
+}

@@ -1,0 +1,52 @@
+.wrapper {
+  position: absolute;
+  top: 5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.banner {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: rgba(10, 10, 26, 0.9);
+  border: 1px solid var(--selah-600);
+  border-radius: 9999px;
+  backdrop-filter: blur(4px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+}
+
+.label {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: var(--selah-300);
+}
+
+.resetButton {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  color: var(--selah-400);
+  transition: color 150ms;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.resetButton:hover {
+  color: #ffffff;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
