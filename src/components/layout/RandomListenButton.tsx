@@ -36,40 +36,41 @@ export function RandomListenButton({ mapRef }: RandomListenButtonProps) {
   const hidden = isRecordingModalOpen || isUploadModalOpen;
 
   return (
-    <button
-      onClick={handleClick}
-      className={`
-        absolute bottom-32 left-4 pb-[env(safe-area-inset-bottom)] sm:bottom-8 sm:left-8 z-[1000]
-        ${hidden ? "hidden" : ""}
-        flex items-center gap-2
-        px-3 py-2 sm:px-4 sm:py-2.5 rounded-full
-        bg-selah-800/80 border border-selah-600
-        text-selah-300 hover:text-white
-        hover:bg-selah-700/80 hover:border-selah-500
-        shadow-lg shadow-black/20
-        transition-all duration-200
-        hover:scale-105 active:scale-95
-      `}
-      aria-label="Listen to a random recording"
-    >
-      <svg
-        width="18"
-        height="18"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
+    <div className={`absolute bottom-32 left-4 mb-[env(safe-area-inset-bottom)] sm:bottom-8 sm:left-8 z-[1000] ${hidden ? "hidden" : ""}`}>
+      <button
+        onClick={handleClick}
+        className="
+          flex items-center justify-center gap-1.5
+          px-3 py-2 sm:px-4 sm:py-2.5 rounded-full
+          bg-selah-800/80 border border-selah-600
+          text-selah-300 hover:text-white
+          hover:bg-selah-700/80 hover:border-selah-500
+          shadow-lg shadow-black/20
+          transition-all duration-200
+          hover:scale-105 active:scale-95
+        "
+        aria-label="Listen to a random recording"
       >
-        <polyline points="16 3 21 3 21 8" />
-        <line x1="4" y1="20" x2="21" y2="3" />
-        <polyline points="21 16 21 21 16 21" />
-        <line x1="15" y1="15" x2="21" y2="21" />
-        <line x1="4" y1="4" x2="9" y2="9" />
-      </svg>
-      <span className="text-sm font-medium hidden sm:inline">Listen to random story</span>
-      <span className="text-sm font-medium sm:hidden">Random</span>
-    </button>
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="shrink-0"
+        >
+          <polyline points="16 3 21 3 21 8" />
+          <line x1="4" y1="20" x2="21" y2="3" />
+          <polyline points="21 16 21 21 16 21" />
+          <line x1="15" y1="15" x2="21" y2="21" />
+          <line x1="4" y1="4" x2="9" y2="9" />
+        </svg>
+        <span className="text-sm font-medium hidden sm:inline">Listen to random story</span>
+        <span className="text-sm font-medium sm:hidden">Random</span>
+      </button>
+    </div>
   );
 }
