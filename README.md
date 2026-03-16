@@ -2,7 +2,7 @@
 
 A global anonymous audio-sharing platform. Record your feelings, pin them to the map, and listen to the world.
 
-Built with Next.js 14, Supabase, Mapbox GL JS, Zustand, and TailwindCSS.
+Built with Next.js 14, Supabase, Mapbox GL JS, Zustand, and CSS Modules.
 
 ## Features
 
@@ -10,11 +10,15 @@ Built with Next.js 14, Supabase, Mapbox GL JS, Zustand, and TailwindCSS.
 - **Interactive 3D globe** — recordings appear as glowing markers on a Mapbox globe
 - **Emotion tagging** — tag recordings with emotions (happy, sad, anxious, grateful, frustrated, sleepless, hopeful, nostalgic)
 - **Location autocomplete** — search for places via Mapbox Geocoding API or use GPS
+- **Optional photo upload** — attach an image to recordings (JPEG, PNG, WebP, HEIC supported). Images are compressed client-side and server-side via sharp for consistent storage
+- **Google authentication** — sign in with Google for persistent accounts; recordings remain anonymous publicly
+- **Personal journal** — view, manage, and toggle public/private on all your recordings at `/journal`
+- **Public/Private recordings** — choose whether to share recordings on the globe or keep them private in your journal
+- **Daily recording limit** — 1 recording per calendar day per user
 - **Comments** — leave anonymous comments on recordings with real-time updates
 - **Date filtering** — filter the map to show recordings from a specific day
 - **Random listen** — discover recordings randomly from anywhere in the world
 - **Reporting & moderation** — report inappropriate content, auto-hide after threshold
-- **Rate limiting** — 1 recording per hour per device
 
 ## Tech Stack
 
@@ -24,9 +28,11 @@ Built with Next.js 14, Supabase, Mapbox GL JS, Zustand, and TailwindCSS.
 | Database | Supabase (PostgreSQL + Storage + Auth) |
 | Map | Mapbox GL JS via react-map-gl |
 | State | Zustand |
-| Styling | TailwindCSS |
+| Styling | CSS Modules |
 | Validation | Zod |
 | Toasts | Sileo |
+| Image processing | sharp (server), Canvas API (client) |
+| HEIC support | heic-convert (server-side conversion) |
 
 ## Getting Started
 
@@ -77,9 +83,11 @@ supabase/migrations/00003_device_id_auth.sql
 supabase/migrations/00004_hourly_rate_limit.sql
 supabase/migrations/00005_fix_rls_policies.sql
 supabase/migrations/00006_comment_rate_limit.sql
+supabase/migrations/00007_auth_and_journal.sql
+supabase/migrations/00008_recording_image.sql
 ```
 
-Also create a **public** storage bucket called `recordings` in Supabase Storage.
+Also create a **public** storage bucket called `recordings` in Supabase Storage. Make sure the bucket allows both audio and image MIME types (JPEG, PNG, WebP).
 
 ### 5. Run the dev server
 
@@ -95,10 +103,13 @@ Open [http://localhost:3000](http://localhost:3000).
 src/
 ├── app/                    # Next.js App Router pages & API routes
 │   ├── api/recordings/     # REST API for recordings, comments, reports
+│   ├── journal/            # Personal journal page
 │   ├── layout.tsx          # Root layout with metadata
 │   └── page.tsx            # Main map page
 ├── components/
+│   ├── auth/               # SignInButton, UserMenu
 │   ├── comments/           # CommentForm, CommentItem, CommentsList
+│   ├── journal/            # JournalList, JournalEntry, PublicPrivateToggle
 │   ├── layout/             # Header, DatePicker, FAB, RandomListenButton
 │   ├── map/                # MapView (globe), MapControls, dynamic loader
 │   ├── modals/             # UploadModal, RecordingModal, ConfirmDialog
@@ -106,12 +117,12 @@ src/
 │   └── ui/                 # Button, Input, Textarea, Modal, Badge, Spinner, IconButton
 ├── hooks/                  # Custom React hooks (media recorder, geolocation, comments, etc.)
 ├── lib/
-│   ├── constants.ts        # App-wide constants (emotions, limits, map defaults)
+│   ├── constants.ts        # App-wide constants (emotions, limits, map defaults, image config)
 │   ├── supabase/           # Supabase client configs (admin, client, server, middleware)
-│   ├── utils/              # Utility functions (audio, fingerprint, names, sanitize, time)
+│   ├── utils/              # Utility functions (audio, image, auth, names, sanitize, time)
 │   └── validators.ts       # Zod schemas for API validation
 ├── providers/              # React context providers
-├── stores/                 # Zustand stores (map, recordings, recorder, auth)
+├── stores/                 # Zustand stores (map, recordings, recorder, auth, journal)
 └── types/                  # TypeScript type definitions
 ```
 
