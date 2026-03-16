@@ -63,6 +63,20 @@
   white-space: nowrap;
 }
 
+.imageContainer {
+  width: 100%;
+  height: 10rem;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  border: 1px solid var(--selah-700);
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 .deleteButton {
   color: var(--selah-500);
   flex-shrink: 0;

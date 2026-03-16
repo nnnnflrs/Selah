@@ -15,7 +15,7 @@ export async function GET(
 
   const { data, error } = await admin
     .from("recordings")
-    .select("id, user_id, anonymous_name, anonymous_id, emotion, audio_url, latitude, longitude, location_text, duration, is_public, created_at, is_approved, reports_count")
+    .select("id, user_id, anonymous_name, anonymous_id, emotion, audio_url, image_url, latitude, longitude, location_text, duration, is_public, created_at, is_approved, reports_count")
     .eq("id", params.id)
     .single();
 
@@ -103,7 +103,7 @@ export async function DELETE(
 
   const { data: recording, error: fetchError } = await admin
     .from("recordings")
-    .select("id, user_id, audio_url")
+    .select("id, user_id, audio_url, image_url")
     .eq("id", params.id)
     .single();
 
@@ -115,11 +115,19 @@ export async function DELETE(
     return NextResponse.json({ error: "Not authorized" }, { status: 403 });
   }
 
-  // Delete audio file from storage
-  const url = new URL(recording.audio_url);
-  const storagePath = url.pathname.split("/recordings/").pop();
-  if (storagePath) {
-    await admin.storage.from("recordings").remove([decodeURIComponent(storagePath)]);
+  // Delete audio and image files from storage
+  const pathsToRemove: string[] = [];
+
+  const audioPath = new URL(recording.audio_url).pathname.split("/recordings/").pop();
+  if (audioPath) pathsToRemove.push(decodeURIComponent(audioPath));
+
+  if (recording.image_url) {
+    const imagePath = new URL(recording.image_url).pathname.split("/recordings/").pop();
+    if (imagePath) pathsToRemove.push(decodeURIComponent(imagePath));
+  }
+
+  if (pathsToRemove.length > 0) {
+    await admin.storage.from("recordings").remove(pathsToRemove);
   }
 
   await Promise.all([

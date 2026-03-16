@@ -171,6 +171,18 @@ export function RecordingModal() {
                     )}
                   </div>
 
+                  {/* Image */}
+                  {recording.image_url && (
+                    <div className={styles.imageContainer}>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={recording.image_url}
+                        alt=""
+                        className={styles.image}
+                      />
+                    </div>
+                  )}
+
                   {/* Player */}
                   <AudioPlayer src={recording.audio_url} fallbackDuration={recording.duration} />
 

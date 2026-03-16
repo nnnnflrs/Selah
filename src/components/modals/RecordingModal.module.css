@@ -52,6 +52,21 @@
   color: #5a5a7a;
 }
 
+/* Image */
+.imageContainer {
+  width: 100%;
+  height: 12rem;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  border: 1px solid var(--selah-700);
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 /* Random Navigation */
 .randomNav {
   display: flex;

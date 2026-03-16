@@ -2,10 +2,13 @@ import { NextRequest, NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { boundsSchema, recordingMetadataSchemaV2 } from "@/lib/validators";
 import { sanitizeText } from "@/lib/utils/sanitize";
-import { RECORDINGS_PAGE_SIZE, DAILY_RECORDING_LIMIT } from "@/lib/constants";
+import { RECORDINGS_PAGE_SIZE, DAILY_RECORDING_LIMIT, ALLOWED_IMAGE_TYPES, MAX_IMAGE_SIZE, MAX_IMAGE_DIMENSION, IMAGE_QUALITY } from "@/lib/constants";
 import { isValidAudioType, isValidAudioSize } from "@/lib/utils/audio";
+import { isHeicFile } from "@/lib/utils/image";
 import { getAuthUser } from "@/lib/utils/auth";
 import { generateVoiceId } from "@/lib/utils/names";
+import sharp from "sharp";
+import heicConvert from "heic-convert";
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -79,6 +82,7 @@ export async function POST(request: NextRequest) {
 
   const formData = await request.formData();
   const audioFile = formData.get("audio") as File | null;
+  const imageFile = formData.get("image") as File | null;
   const metadataRaw = formData.get("metadata") as string | null;
 
   if (!audioFile || !metadataRaw) {
@@ -86,6 +90,24 @@ export async function POST(request: NextRequest) {
       { error: "Missing audio or metadata" },
       { status: 400 }
     );
+  }
+
+  // Validate image if provided
+  if (imageFile) {
+    const isAllowedType = ALLOWED_IMAGE_TYPES.includes(imageFile.type)
+      || isHeicFile(imageFile);
+    if (!isAllowedType) {
+      return NextResponse.json(
+        { error: "Invalid image format. Use JPEG, PNG, WebP, or HEIC." },
+        { status: 400 }
+      );
+    }
+    if (imageFile.size > MAX_IMAGE_SIZE) {
+      return NextResponse.json(
+        { error: "Image too large (max 5MB)" },
+        { status: 400 }
+      );
+    }
   }
 
   if (!isValidAudioType(audioFile.type)) {
@@ -169,6 +191,54 @@ export async function POST(request: NextRequest) {
     data: { publicUrl },
   } = admin.storage.from("recordings").getPublicUrl(storagePath);
 
+  // Upload image if provided — convert HEIC/HEIF to JPEG server-side via sharp
+  let imageUrl: string | null = null;
+  let imageStoragePath: string | null = null;
+  if (imageFile) {
+    const rawBuffer = Buffer.from(await imageFile.arrayBuffer());
+    let inputBuffer = rawBuffer;
+
+    if (isHeicFile(imageFile)) {
+      // Decode HEIC → JPEG via heic-convert before passing to sharp
+      const jpegData = await heicConvert({
+        buffer: rawBuffer as unknown as ArrayBufferLike,
+        format: "JPEG",
+        quality: IMAGE_QUALITY / 100,
+      });
+      inputBuffer = Buffer.from(new Uint8Array(jpegData));
+    }
+
+    // Resize and re-encode all images to JPEG for consistent storage
+    const imageBuffer = await sharp(inputBuffer)
+      .resize(MAX_IMAGE_DIMENSION, MAX_IMAGE_DIMENSION, { fit: "inside", withoutEnlargement: true })
+      .jpeg({ quality: IMAGE_QUALITY })
+      .toBuffer();
+
+    imageStoragePath = `uploads/${fileId}.jpg`;
+
+    const { error: imageUploadError } = await admin.storage
+      .from("recordings")
+      .upload(imageStoragePath, imageBuffer, {
+        contentType: "image/jpeg",
+        upsert: false,
+      });
+
+    if (imageUploadError) {
+      console.error("Image upload failed:", imageUploadError.message);
+      // Clean up already-uploaded audio
+      await admin.storage.from("recordings").remove([storagePath]);
+      return NextResponse.json(
+        { error: "Image upload failed" },
+        { status: 500 }
+      );
+    }
+
+    const { data: { publicUrl: imgPublicUrl } } = admin.storage
+      .from("recordings")
+      .getPublicUrl(imageStoragePath);
+    imageUrl = imgPublicUrl;
+  }
+
   // Generate anonymous voice ID
   const anonymousId = generateVoiceId();
 
@@ -181,6 +251,7 @@ export async function POST(request: NextRequest) {
       anonymous_id: anonymousId,
       emotion: meta.emotion,
       audio_url: publicUrl,
+      image_url: imageUrl,
       latitude: meta.latitude,
       longitude: meta.longitude,
       location_text: sanitizeText(meta.location_text || "", 100),
@@ -193,7 +264,9 @@ export async function POST(request: NextRequest) {
 
   if (insertError) {
     console.error("Failed to save recording:", insertError.message);
-    await admin.storage.from("recordings").remove([storagePath]);
+    const pathsToRemove = [storagePath];
+    if (imageStoragePath) pathsToRemove.push(imageStoragePath);
+    await admin.storage.from("recordings").remove(pathsToRemove);
     return NextResponse.json(
       { error: "Failed to save recording" },
       { status: 500 }

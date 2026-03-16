@@ -11,6 +11,7 @@ export interface Recording {
   longitude: number;
   location_text: string;
   duration: number;
+  image_url: string | null;
   is_public: boolean;
   is_approved: boolean;
   reports_count: number;

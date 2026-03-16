@@ -1,6 +1,8 @@
 .page {
   min-height: 100vh;
   background-color: var(--selah-950);
+  overflow-y: auto;
+  height: 100vh;
 }
 
 .header {

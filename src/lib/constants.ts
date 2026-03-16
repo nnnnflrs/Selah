@@ -23,6 +23,11 @@ export const EMOTIONS: Record<Emotion, EmotionConfig> = {
 
 export const EMOTION_LIST = Object.keys(EMOTIONS) as Emotion[];
 
+export const MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5MB
+export const ALLOWED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp", "image/heic", "image/heif"];
+export const MAX_IMAGE_DIMENSION = 1200; // px — longest side after resize
+export const IMAGE_QUALITY = 85; // JPEG quality (0-100)
+
 export const ALLOWED_AUDIO_TYPES = [
   "audio/webm",
   "audio/ogg",

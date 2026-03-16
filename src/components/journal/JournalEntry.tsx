@@ -101,6 +101,18 @@ export function JournalEntry({ recording }: JournalEntryProps) {
           </button>
         </div>
 
+        {/* Image */}
+        {recording.image_url && (
+          <div className={styles.imageContainer}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={recording.image_url}
+              alt=""
+              className={styles.image}
+            />
+          </div>
+        )}
+
         {/* Audio player */}
         <AudioPlayer
           src={recording.audio_url}

@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
 
   let query = admin
     .from("recordings")
-    .select("id, anonymous_name, anonymous_id, emotion, audio_url, latitude, longitude, location_text, duration, is_public, created_at")
+    .select("id, anonymous_name, anonymous_id, emotion, audio_url, image_url, latitude, longitude, location_text, duration, is_public, created_at")
     .eq("user_id", user.id)
     .order("created_at", { ascending: false })
     .limit(limit + 1);

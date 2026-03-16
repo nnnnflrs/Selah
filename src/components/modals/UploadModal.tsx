@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Modal } from "@/components/ui/Modal";
 import { WaveformVisualizer } from "@/components/recording/WaveformVisualizer";
 import { AudioPlayer } from "@/components/recording/AudioPlayer";
@@ -13,12 +13,14 @@ import { useMapStore } from "@/stores/mapStore";
 import { useRecorderStore } from "@/stores/recorderStore";
 import { useAuthStore } from "@/stores/authStore";
 import { useRecordings } from "@/hooks/useRecordings";
+import { useJournalStore } from "@/stores/journalStore";
 import { useMediaRecorder } from "@/hooks/useMediaRecorder";
 import { useGeolocation } from "@/hooks/useGeolocation";
 import { sileo } from "sileo";
 import { formatDuration } from "@/lib/utils/time";
 import { MAX_DURATION } from "@/lib/constants";
 import { Emotion } from "@/types/emotion";
+import { compressImage, isHeicFile } from "@/lib/utils/image";
 import styles from "./UploadModal.module.css";
 
 export function UploadModal() {
@@ -26,6 +28,7 @@ export function UploadModal() {
   const resetRecorder = useRecorderStore((s) => s.reset);
   const { isAuthenticated } = useAuthStore();
   const { refetch } = useRecordings();
+  const resetJournal = useJournalStore((s) => s.reset);
   const { phase, duration, blob, analyserNode, start, stop, cancel } =
     useMediaRecorder();
   const {
@@ -42,6 +45,10 @@ export function UploadModal() {
   const [isPublic, setIsPublic] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [audioBlobUrl, setAudioBlobUrl] = useState("");
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState("");
+  const [isCompressing, setIsCompressing] = useState(false);
+  const imageInputRef = useRef<HTMLInputElement>(null);
 
   // Create/revoke blob URL when recording finishes
   useEffect(() => {
@@ -54,6 +61,50 @@ export function UploadModal() {
     }
   }, [blob]);
 
+  // Create/revoke image preview URL (HEIC can't be previewed in browser)
+  useEffect(() => {
+    if (imageFile) {
+      if (isHeicFile(imageFile)) {
+        setImagePreview("heic");
+        return;
+      }
+      const url = URL.createObjectURL(imageFile);
+      setImagePreview(url);
+      return () => URL.revokeObjectURL(url);
+    } else {
+      setImagePreview("");
+    }
+  }, [imageFile]);
+
+  const handleImageSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Some browsers report HEIC with empty type — allow by extension too
+    const ext = file.name.toLowerCase().split(".").pop();
+    const isImage = file.type.startsWith("image/") || ext === "heic" || ext === "heif";
+    if (!isImage) {
+      sileo.error({ title: "Please select an image file" });
+      return;
+    }
+
+    setIsCompressing(true);
+    try {
+      const compressed = await compressImage(file);
+      // HEIC files are sent raw — preserve original name/type for server processing
+      const compressedFile = isHeicFile(file)
+        ? new File([compressed], file.name, { type: file.type || "image/heic" })
+        : new File([compressed], "image.jpg", { type: "image/jpeg" });
+      setImageFile(compressedFile);
+    } catch {
+      sileo.error({ title: "Failed to process image" });
+    } finally {
+      setIsCompressing(false);
+      // Reset input so the same file can be re-selected
+      if (imageInputRef.current) imageInputRef.current.value = "";
+    }
+  };
+
   const handleClose = () => {
     cancel();
     resetRecorder();
@@ -61,6 +112,7 @@ export function UploadModal() {
     setLocationText("");
     setIsPublic(true);
     setAudioBlobUrl("");
+    setImageFile(null);
     closeUploadModal();
   };
 
@@ -89,6 +141,9 @@ export function UploadModal() {
 
       const formData = new FormData();
       formData.append("audio", blob, "recording.webm");
+      if (imageFile) {
+        formData.append("image", imageFile, "image.jpg");
+      }
       formData.append(
         "metadata",
         JSON.stringify({
@@ -131,6 +186,7 @@ export function UploadModal() {
       });
       handleClose();
       refetch();
+      resetJournal();
     } catch (err) {
       sileo.error({
         title: err instanceof Error ? err.message : "Upload failed",
@@ -290,6 +346,74 @@ export function UploadModal() {
 
         {/* Visibility Toggle */}
         <PublicPrivateToggle isPublic={isPublic} onChange={setIsPublic} />
+
+        {/* Image (optional) */}
+        <div className={styles.imageSection}>
+          <label className={styles.imageLabel}>
+            Photo <span className={styles.imageOptional}>(optional)</span>
+          </label>
+          <input
+            ref={imageInputRef}
+            type="file"
+            accept="image/jpeg,image/png,image/webp,image/heic,image/heif,.heic,.heif"
+            onChange={handleImageSelect}
+            className={styles.imageInput}
+          />
+          {imagePreview ? (
+            <div className={styles.imagePreviewContainer}>
+              {imagePreview === "heic" ? (
+                <div className={styles.heicPlaceholder}>
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                    <circle cx="8.5" cy="8.5" r="1.5" />
+                    <polyline points="21 15 16 10 5 21" />
+                  </svg>
+                  <span>HEIC photo attached</span>
+                </div>
+              ) : (
+                <>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={imagePreview}
+                    alt="Preview"
+                    className={styles.imagePreview}
+                  />
+                </>
+              )}
+              <button
+                type="button"
+                onClick={() => setImageFile(null)}
+                className={styles.imageRemoveButton}
+                aria-label="Remove image"
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+              </button>
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={() => imageInputRef.current?.click()}
+              className={styles.imagePickerButton}
+              disabled={isCompressing}
+            >
+              {isCompressing ? (
+                "Processing..."
+              ) : (
+                <>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                    <circle cx="8.5" cy="8.5" r="1.5" />
+                    <polyline points="21 15 16 10 5 21" />
+                  </svg>
+                  Add a photo
+                </>
+              )}
+            </button>
+          )}
+        </div>
 
         {/* Location */}
         <div className={styles.locationSection}>
