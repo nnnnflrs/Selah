@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { DatePicker } from "./DatePicker";
 import { SignInButton } from "@/components/auth/SignInButton";
 import { UserMenu } from "@/components/auth/UserMenu";
@@ -120,8 +121,8 @@ export function Header() {
       <header className={styles.header}>
         <div className={styles.headerInner}>
           <div className={styles.logoGroup}>
-            <h1 className={styles.logoText}>
-              Selah<span className={styles.logoDot}>.</span>
+            <h1>
+              <Image src="/selah-logo-white.png" alt="Selah" width={180} height={50} className={styles.logoImage} priority />
             </h1>
             <button
               onClick={() => setShowAbout(true)}
