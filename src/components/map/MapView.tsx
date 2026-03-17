@@ -254,20 +254,34 @@ export default function MapView() {
               key={rec.id}
               longitude={rec.longitude}
               latitude={rec.latitude}
-              anchor="center"
+              anchor="bottom"
               onClick={(e) => {
                 e.originalEvent.stopPropagation();
                 selectRecording(rec.id);
               }}
             >
               <div
-                className={`marker-glow ${styles.markerButton}`}
+                className={`marker-pin ${styles.markerButton}`}
                 style={{ "--glow-color": color } as React.CSSProperties}
               >
-                <div
-                  className="marker-glow-inner"
-                  style={{ background: color }}
-                />
+                <svg width="36" height="46" viewBox="0 0 36 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <defs>
+                    <filter id={`glow-${rec.id}`} x="-50%" y="-50%" width="200%" height="200%">
+                      <feGaussianBlur stdDeviation="3" result="blur" />
+                      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                    </filter>
+                    <radialGradient id={`grad-${rec.id}`} cx="50%" cy="40%" r="60%">
+                      <stop offset="0%" stopColor={color} stopOpacity="0.9" />
+                      <stop offset="100%" stopColor={color} stopOpacity="0.5" />
+                    </radialGradient>
+                  </defs>
+                  {/* Glow aura */}
+                  <ellipse cx="18" cy="18" rx="16" ry="16" fill={color} opacity="0.25" filter={`url(#glow-${rec.id})`} />
+                  {/* Pin body */}
+                  <path d="M18 44C18 44 32 27 32 18C32 10.268 25.732 4 18 4C10.268 4 4 10.268 4 18C4 27 18 44 18 44Z" fill={`url(#grad-${rec.id})`} stroke={color} strokeWidth="1.5" strokeOpacity="0.6" />
+                  {/* Inner dot */}
+                  <circle cx="18" cy="18" r="5" fill="white" opacity="0.85" />
+                </svg>
               </div>
             </Marker>
           );
