@@ -122,7 +122,7 @@ export function Header() {
         <div className={styles.headerInner}>
           <div className={styles.logoGroup}>
             <h1>
-              <Image src="/selah-logo-white.png" alt="Selah" width={180} height={50} className={styles.logoImage} priority />
+              <Image src="/selah-logo-white.png" alt="Selah" width={180} height={24} className={styles.logoImage} priority />
             </h1>
             <button
               onClick={() => setShowAbout(true)}
